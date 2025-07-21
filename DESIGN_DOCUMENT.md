@@ -1,4 +1,5 @@
 # Kyoryoku System Design Document
+
 **Version 1.0** | **Date**: 2025-01-20 | **Research Prototype Architecture**
 
 ---
@@ -8,6 +9,7 @@
 This document defines the system architecture for Kyoryoku (協力), a research platform for exploring multi-agent AI collaboration. The design prioritizes **flexibility for experimentation** over production optimization, enabling rapid testing of different agent configurations and coordination patterns.
 
 ### Design Philosophy
+
 - **Research-First**: Every architectural decision supports hypothesis testing and pattern discovery
 - **Flexibility Over Performance**: Optimize for configuration variety rather than speed
 - **Observable Interactions**: Make all agent communications and reasoning transparent
@@ -35,13 +37,13 @@ This document defines the system architecture for Kyoryoku (協力), a research 
 
 ### 2.2 Core Design Decisions
 
-| **Decision** | **Rationale** | **Trade-offs** |
-|--------------|---------------|----------------|
-| **Monolithic Backend** | Simplicity for research prototype | Limited horizontal scaling |
-| **SQLAlchemy + PostgreSQL** | Rich querying for analysis | Higher complexity than NoSQL |
-| **Redis for Sessions** | Fast state management | Additional infrastructure |
-| **Socket.io for Real-time** | Mature WebSocket library | More overhead than native WS |
-| **LangGraph Orchestration** | Built for agent workflows | Learning curve, dependency |
+| **Decision**                | **Rationale**                     | **Trade-offs**               |
+| --------------------------- | --------------------------------- | ---------------------------- |
+| **Monolithic Backend**      | Simplicity for research prototype | Limited horizontal scaling   |
+| **SQLAlchemy + PostgreSQL** | Rich querying for analysis        | Higher complexity than NoSQL |
+| **Redis for Sessions**      | Fast state management             | Additional infrastructure    |
+| **Socket.io for Real-time** | Mature WebSocket library          | More overhead than native WS |
+| **LangGraph Orchestration** | Built for agent workflows         | Learning curve, dependency   |
 
 ---
 
@@ -67,6 +69,7 @@ class Agent:
 ```
 
 **Key Design Decisions**:
+
 - **Beliefs as Dict[str, float]**: Enables confidence-weighted knowledge
 - **Capabilities as List[str]**: Simple but extensible skill system
 - **Memory as Separate Entity**: Allows complex memory architectures
@@ -91,6 +94,7 @@ class Team:
 ```
 
 **Key Design Decisions**:
+
 - **Coordination Patterns**: Explicit models for different team structures
 - **Communication Rules**: Configurable interaction protocols
 - **Shared Memory**: Team-level knowledge distinct from individual agent memory
@@ -99,8 +103,10 @@ class Team:
 ### 3.3 Team Templates (from PRD v22)
 
 **1. Customer Success Response Team**
+
 - **Use Case**: Scale support quality across all representatives
 - **Target Metric**: Resolve tickets in 2 minutes vs 20 minutes
+
 ```python
 CUSTOMER_SUCCESS_TEMPLATE = {
     "name": "Customer Success Response Team",
@@ -115,8 +121,10 @@ CUSTOMER_SUCCESS_TEMPLATE = {
 ```
 
 **2. RFP/Proposal Acceleration Team**
+
 - **Use Case**: Win more deals by responding to RFPs 10x faster
 - **Target Metric**: Complete 50-page RFP in 1 hour vs 1 week
+
 ```python
 RFP_ACCELERATION_TEMPLATE = {
     "name": "RFP/Proposal Acceleration Team",
@@ -131,8 +139,10 @@ RFP_ACCELERATION_TEMPLATE = {
 ```
 
 **3. Product Intelligence Team**
+
 - **Use Case**: Synthesize customer feedback into actionable insights
 - **Target Metric**: Process 1,000 inputs into 5 insights daily
+
 ```python
 PRODUCT_INTELLIGENCE_TEMPLATE = {
     "name": "Product Intelligence Team",
@@ -147,8 +157,10 @@ PRODUCT_INTELLIGENCE_TEMPLATE = {
 ```
 
 **4. Knowledge Transfer Team**
+
 - **Use Case**: Preserve and scale institutional knowledge
 - **Target Metric**: Reduce onboarding time from 3 months to 3 weeks
+
 ```python
 KNOWLEDGE_TRANSFER_TEMPLATE = {
     "name": "Knowledge Transfer Team",
@@ -163,8 +175,10 @@ KNOWLEDGE_TRANSFER_TEMPLATE = {
 ```
 
 **5. Market Intelligence Team**
+
 - **Use Case**: Monitor competitive landscape continuously
 - **Target Metric**: Track 50 competitors with daily updates
+
 ```python
 MARKET_INTELLIGENCE_TEMPLATE = {
     "name": "Market Intelligence Team",
@@ -178,7 +192,64 @@ MARKET_INTELLIGENCE_TEMPLATE = {
 }
 ```
 
-**5. Custom Teams**: User-defined configurations
+**6. Content Creation Team** _(Demo/Validation Only)_
+
+- **Use Case**: Platform validation and customer demos (NOT a target market)
+- **Target Metric**: 10-minute content creation vs 2-hour traditional process
+
+```python
+CONTENT_CREATION_TEMPLATE = {
+    "name": "Content Creation Squad",
+    "description": "Transform ideas into engaging content through specialized collaboration",
+    "template_type": "content_creation",
+    "coordination_pattern": "iterative_refinement",
+    "agents": [
+        {
+            "role": "Story Miner",
+            "capabilities": ["analyze_source_material", "identify_key_moments", "extract_narratives", "find_emotional_arcs"],
+            "prompts": {
+                "init": "You extract compelling stories and key moments from source material.",
+                "analyze": "Find the most interesting and relatable moments in this content."
+            }
+        },
+        {
+            "role": "Technical Translator",
+            "capabilities": ["simplify_complex_concepts", "create_analogies", "remove_jargon", "explain_clearly"],
+            "prompts": {
+                "init": "You make technical concepts accessible to general audiences.",
+                "translate": "Explain this concept like you're talking to a smart friend who isn't technical."
+            }
+        },
+        {
+            "role": "Voice Crafter",
+            "capabilities": ["maintain_tone", "inject_personality", "balance_formality", "ensure_authenticity"],
+            "prompts": {
+                "init": "You ensure content sounds personal, authentic, and engaging.",
+                "refine": "Make this sound like a founder sharing their journey, not a corporation."
+            }
+        },
+        {
+            "role": "Structure Architect",
+            "capabilities": ["organize_flow", "create_transitions", "ensure_coherence", "optimize_narrative_arc"],
+            "prompts": {
+                "init": "You organize ideas into compelling narrative structures.",
+                "structure": "Arrange these ideas for maximum impact and readability."
+            }
+        },
+        {
+            "role": "Hook Designer",
+            "capabilities": ["craft_openings", "create_cliffhangers", "design_cta", "maintain_momentum"],
+            "prompts": {
+                "init": "You create attention-grabbing hooks and maintain reader engagement.",
+                "hook": "Add elements that make people need to keep reading."
+            }
+        }
+    ]
+}
+```
+
+**7. Custom Teams**: User-defined configurations
+
 ```python
 class CustomTeamBuilder:
     def create_team(self, team_spec: TeamSpecification) -> Team:
@@ -210,6 +281,7 @@ class Session:
 ```
 
 **Key Design Decisions**:
+
 - **Configuration Snapshot**: Immutable record of team state at execution
 - **Metrics Dictionary**: Flexible schema for different measurement types
 - **Status Enum**: Clear lifecycle management
@@ -231,6 +303,7 @@ class Message:
 ```
 
 **Key Design Decisions**:
+
 - **Optional Sender/Recipient**: Supports human-agent and broadcast communication
 - **Message Types**: Structured communication patterns
 - **Metadata Dictionary**: Extensible for reasoning traces and debug info
@@ -245,20 +318,20 @@ class Message:
 class AgentState:
     # Core Identity
     identity: AgentIdentity      # name, role, capabilities
-    
+
     # Working Memory (Session-specific)
     current_task: Optional[str]
     context: Dict[str, Any]      # Current conversation context
     active_goals: List[str]
-    
+
     # Long-term Memory
     episodic_memory: List[Episode]    # Specific past interactions
     semantic_memory: Dict[str, float] # General knowledge patterns
-    
+
     # Communication State
     message_queue: List[Message]
     waiting_for_response: bool
-    
+
     # Performance Tracking
     success_rate: float
     learning_metrics: Dict
@@ -273,6 +346,7 @@ Initialize → Configure → Activate → Execute → Respond → Learn → Pers
 ```
 
 **Phases**:
+
 1. **Initialize**: Load agent configuration and memory
 2. **Configure**: Apply session-specific settings
 3. **Activate**: Begin monitoring for tasks/messages
@@ -288,6 +362,7 @@ Initialize → Configure → Activate → Execute → Respond → Learn → Pers
 #### Learning Phases Architecture
 
 **Phase 1: Shadow Mode (Weeks 1-2)**
+
 ```python
 class ShadowMode:
     def __init__(self):
@@ -295,7 +370,7 @@ class ShadowMode:
         self.customer_interaction = False
         self.pattern_recognition = PatternRecognizer()
         self.knowledge_capture = KnowledgeCapture()
-    
+
     async def observe_interaction(self, human_session: HumanSession):
         """Watch human interactions without participating"""
         patterns = await self.pattern_recognition.identify_patterns(human_session)
@@ -308,13 +383,14 @@ class ShadowMode:
 ```
 
 **Phase 2: Suggestion Mode (Weeks 3-4)**
+
 ```python
 class SuggestionMode:
     def __init__(self):
         self.suggest_actions = True
         self.require_human_approval = True
         self.learning_tracker = LearningTracker()
-    
+
     async def propose_response(self, ticket: SupportTicket) -> Suggestion:
         """Suggest responses for human review"""
         suggestion = await self.generate_suggestion(ticket)
@@ -323,7 +399,7 @@ class SuggestionMode:
             confidence_score=self.calculate_confidence(suggestion),
             requires_approval=True
         )
-    
+
     async def learn_from_edit(self, suggestion: Suggestion, human_edit: HumanEdit):
         """Learn why humans modify suggestions"""
         await self.learning_tracker.record_modification(suggestion, human_edit)
@@ -331,21 +407,22 @@ class SuggestionMode:
 ```
 
 **Phase 3: Assisted Mode (Week 5+)**
+
 ```python
 class AssistedMode:
     def __init__(self):
         self.autonomous_threshold = 0.85  # Confidence threshold for autonomy
         self.escalation_rules = EscalationRules()
-        
+
     async def handle_ticket(self, ticket: SupportTicket) -> ActionResult:
         """Handle tickets autonomously or escalate"""
         confidence = await self.assess_confidence(ticket)
-        
+
         if confidence >= self.autonomous_threshold:
             return await self.handle_autonomously(ticket)
         else:
             return await self.escalate_to_human(ticket, confidence)
-    
+
     async def expand_coverage(self):
         """Gradually increase autonomous scope"""
         successful_patterns = await self.analyze_success_patterns()
@@ -355,23 +432,25 @@ class AssistedMode:
 #### Knowledge Capture Components
 
 **SOP Discovery System**
+
 ```python
 class SOPDiscoverySystem:
     def __init__(self):
         self.document_analyzer = DocumentAnalyzer()
         self.interaction_recorder = InteractionRecorder()
         self.decision_mapper = DecisionMapper()
-        
+
     async def discover_procedures(self) -> List[SOP]:
         """Extract standard operating procedures from observations"""
         documents = await self.document_analyzer.ingest_existing_docs()
         interactions = await self.interaction_recorder.capture_sessions()
         decisions = await self.decision_mapper.map_decision_trees()
-        
+
         return await self.synthesize_sops(documents, interactions, decisions)
 ```
 
 **Learning Data Model**
+
 ```python
 class LearningSession:
     interaction_id: str
@@ -381,7 +460,7 @@ class LearningSession:
     confidence_scores: Dict[str, float]
     human_annotations: List[Annotation]
     learning_phase: LearningPhase  # shadow, suggestion, assisted
-    
+
 class LearningProgress:
     week: int
     phase: LearningPhase
@@ -389,7 +468,7 @@ class LearningProgress:
     patterns_learned: int
     suggestion_accuracy: Optional[float]
     autonomous_coverage: float
-    
+
 class PatternLearning:
     pattern_type: str  # workflow, language, decision_rule, exception
     confidence: float
@@ -408,25 +487,25 @@ class AgentMemory:
     shadow_observations: List[ShadowObservation]
     learned_procedures: Dict[str, SOP]
     confidence_map: Dict[str, float]
-    
+
     # Episodic Memory - Specific experiences
     episodes: List[Episode]
     max_episodes: int = 1000
-    
+
     # Semantic Memory - Learned patterns
     patterns: Dict[str, MemoryPattern]
     confidence_threshold: float = 0.7
-    
+
     # Working Memory - Current session
     context_window: List[Message]
     max_context_length: int = 4000  # tokens
-    
+
     def retrieve_relevant(self, query: str) -> List[MemoryItem]:
         """Retrieve memories relevant to current task including shadow learnings"""
         traditional_memories = self._search_episodic_semantic(query)
         shadow_learnings = self._search_shadow_patterns(query)
         return self._merge_and_rank(traditional_memories, shadow_learnings)
-    
+
     def update_from_shadow_learning(self, observation: ShadowObservation):
         """Update memory from shadow learning observations"""
         self.shadow_observations.append(observation)
@@ -435,6 +514,7 @@ class AgentMemory:
 ```
 
 **Key Design Decisions for Shadow Learning**:
+
 - **Three-phase progression** ensures gradual capability building
 - **Confidence-based autonomy** prevents premature independent action
 - **Continuous learning** allows ongoing improvement post-deployment
@@ -447,6 +527,7 @@ class AgentMemory:
 ### 5.1 Communication Patterns
 
 **1. Direct Messaging**
+
 ```python
 # Agent A sends specific request to Agent B
 message = DirectMessage(
@@ -458,6 +539,7 @@ message = DirectMessage(
 ```
 
 **2. Broadcast Communication**
+
 ```python
 # Agent announces to entire team
 message = BroadcastMessage(
@@ -468,6 +550,7 @@ message = BroadcastMessage(
 ```
 
 **3. Request/Response Pattern**
+
 ```python
 # Structured task delegation
 request = TaskRequest(
@@ -482,19 +565,65 @@ request = TaskRequest(
 ### 5.2 Coordination Patterns
 
 **Hierarchical Coordination**
+
 - Designated team leader assigns and coordinates tasks
 - Clear authority structure
 - Efficient for well-defined workflows
 
 **Peer-to-Peer Coordination**
+
 - Agents negotiate task distribution
 - Democratic decision-making
 - Better for creative/exploratory tasks
 
 **Pipeline Coordination**
+
 - Sequential task handoffs
 - Each agent has specific role in pipeline
 - Optimal for linear workflows
+
+**Iterative Refinement Coordination** _(For Content Creation Demo)_
+
+- Agents work in rounds, each building on the previous agent's work
+- Perfect for creative processes where each specialist improves the output
+- Used specifically for the Content Creation Team template
+
+```python
+class IterativeRefinementPattern(CoordinationPattern):
+    """
+    Agents work in rounds, each building on the previous agent's work.
+    Perfect for creative processes where each specialist improves the output.
+    """
+
+    async def execute(self, task: Task, team: Team) -> Result:
+        content = task.source_material
+
+        # Round 1: Story Mining
+        story_elements = await team.agents['Story Miner'].extract_stories(content)
+
+        # Round 2: Structure
+        structured_draft = await team.agents['Structure Architect'].organize(story_elements)
+
+        # Round 3: Translation
+        readable_draft = await team.agents['Technical Translator'].simplify(structured_draft)
+
+        # Round 4: Voice
+        personality_draft = await team.agents['Voice Crafter'].add_voice(readable_draft)
+
+        # Round 5: Hooks
+        final_draft = await team.agents['Hook Designer'].add_engagement(personality_draft)
+
+        # Allow for additional refinement rounds based on feedback
+        if task.requires_iteration:
+            return await self._iterate_based_on_feedback(final_draft, team)
+
+        return final_draft
+
+    async def _iterate_based_on_feedback(self, draft: str, team: Team) -> str:
+        """Allow additional refinement rounds based on user feedback"""
+        # Implementation for feedback-driven iteration
+        pass
+```
 
 ### 5.3 Conflict Resolution
 
@@ -505,11 +634,11 @@ class ConflictResolver:
     def resolve_capability_conflict(self, task: Task, candidates: List[Agent]):
         """When multiple agents can handle a task"""
         return self._select_by_expertise_score(candidates, task)
-    
+
     def resolve_resource_conflict(self, resource: str, requesters: List[Agent]):
         """When multiple agents need same resource"""
         return self._queue_by_priority(requesters)
-    
+
     def resolve_opinion_conflict(self, opinions: List[AgentOpinion]):
         """When agents disagree on approach/answer"""
         return self._weighted_consensus(opinions)
@@ -530,7 +659,7 @@ class ClaudeService:
         self.model = model
         self.rate_limiter = RateLimiter(requests_per_minute=60)
         self.token_tracker = TokenUsageTracker()
-    
+
     async def generate_response(
         self,
         messages: List[Message],
@@ -538,29 +667,30 @@ class ClaudeService:
         max_tokens: int = 1024
     ) -> AgentResponse:
         """Generate agent response with context and constraints"""
-        
+
         # Build prompt with agent identity and context
         prompt = self._build_agent_prompt(agent_context, messages)
-        
+
         # Apply rate limiting
         await self.rate_limiter.acquire()
-        
+
         # Call Claude API
         response = await self.client.messages.create(
             model=self.model,
             max_tokens=max_tokens,
             messages=prompt
         )
-        
+
         # Track token usage
         self.token_tracker.record(response.usage)
-        
+
         return self._parse_agent_response(response)
 ```
 
 ### 6.2 Prompt Engineering Strategy
 
 **Agent Identity Prompts**
+
 ```python
 AGENT_PROMPT_TEMPLATE = """
 You are {agent_name}, a {agent_role} with the following capabilities: {capabilities}.
@@ -584,6 +714,7 @@ Respond as {agent_name} would, using your capabilities to advance the team's goa
 ```
 
 **Assumptions**:
+
 - **Clear agent identity** in prompts improves role consistency
 - **Explicit capabilities** help constrain agent behavior appropriately
 - **Recent context** is more important than full conversation history
@@ -597,18 +728,18 @@ Respond as {agent_name} would, using your capabilities to advance the team's goa
 class TokenManager:
     MAX_CONTEXT_TOKENS = 8000      # Per agent per session
     SUMMARY_THRESHOLD = 6000       # When to summarize context
-    
+
     def optimize_context(self, messages: List[Message]) -> List[Message]:
         """Compress context when approaching token limits"""
         if self.estimate_tokens(messages) > self.SUMMARY_THRESHOLD:
             return self._summarize_older_messages(messages)
         return messages
-    
+
     def _summarize_older_messages(self, messages: List[Message]) -> List[Message]:
         """Keep recent messages, summarize older ones"""
         recent = messages[-10:]  # Keep last 10 messages
         older = messages[:-10]
-        
+
         summary = self._generate_summary(older)
         return [summary] + recent
 ```
@@ -620,6 +751,7 @@ class TokenManager:
 ### 7.1 Database Schema Design
 
 **Core Tables**:
+
 ```sql
 -- Agents table
 CREATE TABLE agents (
@@ -691,6 +823,7 @@ User Input → Session Creation → Team Activation → Agent Execution → Mess
 ```
 
 **Design Decisions**:
+
 - **JSONB for flexibility**: Allows schema evolution without migrations
 - **UUID for all IDs**: Enables distributed systems later
 - **Separate team membership**: Supports agents in multiple teams
@@ -699,6 +832,7 @@ User Input → Session Creation → Team Activation → Agent Execution → Mess
 ### 7.3 Caching Strategy
 
 **Redis Usage**:
+
 ```python
 # Session state caching
 session_key = f"session:{session_id}"
@@ -720,6 +854,7 @@ redis.hset(agent_key, {
 ```
 
 **Assumptions**:
+
 - **Session state** changes frequently and benefits from caching
 - **Agent working memory** is session-specific and can be cached
 - **1-hour TTL** balances memory usage with session length
@@ -731,22 +866,24 @@ redis.hset(agent_key, {
 
 ### 8.1 Performance Requirements (from PRD)
 
-| **Metric** | **Target** | **Design Implication** |
-|------------|------------|------------------------|
-| Response Time | < 5 seconds | Async processing, request queuing |
-| Concurrent Sessions | 20+ | Connection pooling, resource limits |
-| Message Throughput | 100+ msgs/min | Efficient WebSocket handling |
-| Storage per Session | 1GB | Optimized message storage |
+| **Metric**          | **Target**    | **Design Implication**              |
+| ------------------- | ------------- | ----------------------------------- |
+| Response Time       | < 5 seconds   | Async processing, request queuing   |
+| Concurrent Sessions | 20+           | Connection pooling, resource limits |
+| Message Throughput  | 100+ msgs/min | Efficient WebSocket handling        |
+| Storage per Session | 1GB           | Optimized message storage           |
 
 ### 8.2 Scalability Constraints
 
 **Current Architecture Limits**:
+
 - **Single Backend Instance**: No horizontal scaling
 - **Shared PostgreSQL**: Potential bottleneck for high concurrency
 - **In-Memory Session State**: Limited by server RAM
 - **Synchronous Agent Processing**: Sequential execution within teams
 
 **Future Scaling Strategies** (Out of Scope):
+
 - Microservices architecture for agent execution
 - Database sharding by session/team
 - Distributed caching with Redis Cluster
@@ -759,15 +896,15 @@ class ResourceManager:
     MAX_CONCURRENT_SESSIONS = 20
     MAX_AGENTS_PER_SESSION = 10
     MAX_MESSAGES_PER_MINUTE = 100
-    
+
     def __init__(self):
         self.session_semaphore = asyncio.Semaphore(self.MAX_CONCURRENT_SESSIONS)
         self.rate_limiters = {}
-    
+
     async def acquire_session_slot(self) -> bool:
         """Acquire permission to start new session"""
         return await self.session_semaphore.acquire()
-    
+
     def get_rate_limiter(self, session_id: str) -> RateLimiter:
         """Get rate limiter for specific session"""
         if session_id not in self.rate_limiters:
@@ -790,22 +927,22 @@ class AuthenticationService:
     def __init__(self, email_service: EmailService):
         self.email_service = email_service
         self.pending_logins = {}  # In-memory for prototype
-    
+
     async def request_login(self, email: str) -> bool:
         """Send magic link to user email"""
         token = self._generate_secure_token()
         magic_link = f"{settings.FRONTEND_URL}/auth/verify?token={token}"
-        
+
         # Store pending login
         self.pending_logins[token] = {
             "email": email,
             "expires_at": datetime.now() + timedelta(minutes=15)
         }
-        
+
         # Send email
         await self.email_service.send_magic_link(email, magic_link)
         return True
-    
+
     def verify_token(self, token: str) -> Optional[User]:
         """Verify magic link token and create session"""
         if token in self.pending_logins:
@@ -819,11 +956,13 @@ class AuthenticationService:
 ### 9.2 Authorization Model
 
 **Simple Role-Based Access**:
+
 - **Anonymous**: Can view public demos
 - **Authenticated**: Can create sessions and teams
 - **Admin**: Can view all sessions and system metrics
 
 **Assumptions**:
+
 - **Research prototype** doesn't need complex permissions
 - **Email-based identity** is sufficient for user tracking
 - **No sensitive data** requiring encryption at rest
@@ -832,6 +971,7 @@ class AuthenticationService:
 ### 9.3 Data Privacy
 
 **Minimal Data Collection**:
+
 - Email addresses for authentication only
 - Session data for research analysis
 - No personal information in agent configurations
@@ -844,6 +984,7 @@ class AuthenticationService:
 ### 10.1 Core Test Scenarios (from PRD v22)
 
 **Scenario 1: Customer Support Excellence**
+
 - **Team**: Customer Success Response Team
 - **Task**: Handle 20 real support tickets across billing, technical, and feature requests
 - **Metrics**: Resolution time, accuracy, escalation rate, customer satisfaction
@@ -851,6 +992,7 @@ class AuthenticationService:
 - **Architecture Requirement**: Sequential pipeline with escalation routing
 
 **Scenario 2: RFP Response Speed**
+
 - **Team**: RFP/Proposal Acceleration Team
 - **Task**: Complete comprehensive response to 30-page RFP
 - **Metrics**: Completion time, requirement coverage, win rate, accuracy
@@ -858,13 +1000,15 @@ class AuthenticationService:
 - **Architecture Requirement**: Parallel assembly with compliance validation
 
 **Scenario 3: Product Feedback Synthesis**
-- **Team**: Product Intelligence Team  
+
+- **Team**: Product Intelligence Team
 - **Task**: Analyze 500 customer feedback items from multiple channels
 - **Metrics**: Insight quality, pattern identification, actionability score
 - **Target**: Process 1,000 inputs into 5 insights daily
 - **Architecture Requirement**: Parallel collection with intelligent synthesis
 
 **Scenario 4: Competitive Intelligence**
+
 - **Team**: Market Intelligence Team
 - **Task**: Monitor 10 competitors for one week, produce daily briefs
 - **Metrics**: Signal detection rate, relevance, timeliness, actionability
@@ -872,6 +1016,7 @@ class AuthenticationService:
 - **Architecture Requirement**: Continuous monitoring with impact assessment
 
 **Scenario 5: Knowledge Preservation**
+
 - **Team**: Knowledge Transfer Team
 - **Task**: Document and teach complex multi-step process
 - **Metrics**: Accuracy, completeness, new hire success rate
@@ -881,8 +1026,9 @@ class AuthenticationService:
 ### 10.1.1 Custom Scenario Builder (from PRD)
 
 **Requirements**: Allow users to define custom test scenarios with:
+
 - Agent roles and capabilities
-- Task descriptions and success criteria  
+- Task descriptions and success criteria
 - Coordination rules
 - Evaluation metrics
 
@@ -915,13 +1061,14 @@ class ScenarioSpecification:
 ```
 
 **Example Shadow Learning Scenario** (from PRD v22 Appendix):
+
 ```yaml
 scenario: "Customer Support Shadow Learning"
 team:
   - name: "Triage Specialist"
     role: "Observe ticket categorization patterns"
     learning_focus: ["priority_detection", "routing_rules", "urgency_markers"]
-  - name: "Solution Researcher"  
+  - name: "Solution Researcher"
     role: "Learn knowledge base navigation"
     learning_focus: ["search_patterns", "doc_relevance", "solution_matching"]
   - name: "Response Crafter"
@@ -935,14 +1082,14 @@ phases:
       - Observe 500+ ticket resolutions
       - Map decision trees for common issues
       - Identify undocumented workarounds
-  
+
   suggestion:
-    duration: "2 weeks"  
+    duration: "2 weeks"
     activities:
       - Propose responses for human review
       - Track acceptance and modification rates
       - Learn from human corrections
-      
+
   assisted:
     metrics:
       - autonomy_rate: "85% of routine tickets"
@@ -953,6 +1100,7 @@ phases:
 ### 10.2 Hypothesis Testing Framework
 
 **H1: Specialized Agents Outperform Generalists**
+
 ```python
 class SpecializationTest:
     def run_comparison(self, task: Task):
@@ -960,12 +1108,12 @@ class SpecializationTest:
         generalist_result = await self.run_single_agent(
             agent=GeneralistAgent(), task=task
         )
-        
+
         # Specialized team execution
         specialist_result = await self.run_team(
             team=self.get_specialist_team(task.domain), task=task
         )
-        
+
         return ComparisonMetrics(
             task_completion_rate=specialist_result.success_rate / generalist_result.success_rate,
             quality_improvement=specialist_result.quality_score - generalist_result.quality_score,
@@ -974,17 +1122,18 @@ class SpecializationTest:
 ```
 
 **H2: Agents Can Learn from Human Feedback**
+
 ```python
 class LearningTest:
     async def measure_improvement(self, agent: Agent, feedback_sessions: int = 5):
         baseline_performance = await self.run_baseline_test(agent)
-        
+
         for session in range(feedback_sessions):
             result = await self.run_task_with_feedback(agent)
             await self.apply_coaching_feedback(agent, result)
-            
+
         final_performance = await self.run_final_test(agent)
-        
+
         return LearningMetrics(
             error_reduction_rate=(baseline_performance.errors - final_performance.errors) / baseline_performance.errors,
             pattern_recognition_improvement=final_performance.pattern_score - baseline_performance.pattern_score,
@@ -993,15 +1142,16 @@ class LearningTest:
 ```
 
 **H3: Transparent Reasoning Builds Trust**
+
 ```python
 class TransparencyTest:
     async def measure_trust_impact(self, session: Session):
         # Run with explanation features
         transparent_session = await self.run_with_explanations(session)
-        
-        # Run without explanation features  
+
+        # Run without explanation features
         opaque_session = await self.run_without_explanations(session)
-        
+
         return TrustMetrics(
             trust_scores=await self.collect_user_trust_ratings(),
             adoption_rates=self.measure_feature_usage(),
@@ -1010,11 +1160,12 @@ class TransparencyTest:
 ```
 
 **H4: Agent Teams Can Self-Coordinate**
+
 ```python
 class CoordinationTest:
     async def measure_self_coordination(self, team: Team, task: Task):
         coordination_result = await self.run_autonomous_coordination(team, task)
-        
+
         return CoordinationMetrics(
             coordination_accuracy=coordination_result.correct_delegations / coordination_result.total_delegations,
             handoff_success_rate=coordination_result.successful_handoffs / coordination_result.total_handoffs,
@@ -1025,12 +1176,14 @@ class CoordinationTest:
 ### 10.3 Success Metrics from PRD v22
 
 **Technical Validation Targets**:
+
 - **Coordination Success**: 70%+ multi-agent task completion
-- **Learning Effectiveness**: 15%+ improvement after coaching  
+- **Learning Effectiveness**: 15%+ improvement after coaching
 - **Explanation Quality**: 85%+ reasoning accuracy
 - **System Reliability**: 95%+ uptime
 
 **Shadow Learning Metrics** (New in v22):
+
 - **Knowledge Coverage**: Percentage of ticket types learned
 - **Pattern Discovery**: New SOPs identified per week
 - **Accuracy Progression**: Improvement in suggestion acceptance (target: 72% → 93%)
@@ -1038,12 +1191,14 @@ class CoordinationTest:
 - **Edge Case Handling**: Successful resolution of unusual scenarios
 
 **Use Case Discovery Goals**:
+
 - **High-Potential Cases**: Identify 3-5 with clear value
 - **PMF Indicators**: Measurable improvement over single agent
 - **Feasibility Assessment**: Technical readiness for production
 - **Market Validation**: User excitement and willingness to pay
 
 **Business Impact Targets** (from v22 Team Templates):
+
 - **Customer Support**: 2 minutes vs 20 minutes resolution time
 - **RFP Response**: 1 hour vs 1 week completion time
 - **Product Intelligence**: 1,000 inputs → 5 insights daily
@@ -1060,20 +1215,20 @@ class MetricsCollector:
         self.message_counter = Counter('kyoryoku_messages_total')
         self.response_time_histogram = Histogram('kyoryoku_response_time_seconds')
         self.agent_performance_gauge = Gauge('kyoryoku_agent_performance_score')
-        
+
         # PRD-specific metrics
         self.coordination_success_rate = Gauge('kyoryoku_coordination_success_rate')
         self.learning_improvement_rate = Gauge('kyoryoku_learning_improvement_rate')
         self.explanation_accuracy = Gauge('kyoryoku_explanation_accuracy')
-    
+
     def record_hypothesis_test_result(self, hypothesis: str, result: TestResult):
         """Record results for each core hypothesis"""
         self.hypothesis_results.labels(hypothesis=hypothesis).set(result.success_score)
-        
+
     def record_scenario_completion(self, scenario: str, team_config: str, success: bool):
         """Track completion rates by scenario and team configuration"""
         self.scenario_success.labels(
-            scenario=scenario, 
+            scenario=scenario,
             team_config=team_config
         ).inc() if success else self.scenario_failure.labels(
             scenario=scenario,
@@ -1084,8 +1239,9 @@ class MetricsCollector:
 ### 10.5 Research Analytics Pipeline
 
 **Key Metrics for Research Questions**:
+
 - **Optimal Team Size**: Success rate vs. team size by task type
-- **Context Sharing Effectiveness**: Information retention across agent handoffs  
+- **Context Sharing Effectiveness**: Information retention across agent handoffs
 - **Feedback Mechanism Efficiency**: Learning rate by feedback type
 - **Coordination Protocol Breakdown Points**: Failure modes by coordination pattern
 
@@ -1099,20 +1255,20 @@ logger = structlog.get_logger()
 class AgentExecutionService:
     async def execute_task(self, agent: Agent, task: Task) -> TaskResult:
         try:
-            logger.info("Starting task execution", 
+            logger.info("Starting task execution",
                        agent_id=agent.id, task_type=task.type)
-            
+
             result = await self._execute_with_timeout(agent, task)
-            
+
             logger.info("Task completed successfully",
                        agent_id=agent.id, duration=result.duration)
             return result
-            
+
         except TimeoutError:
             logger.error("Task execution timeout",
                         agent_id=agent.id, timeout=task.timeout)
             return TaskResult.timeout()
-            
+
         except Exception as e:
             logger.error("Task execution failed",
                         agent_id=agent.id, error=str(e), exc_info=True)
@@ -1125,33 +1281,33 @@ class AgentExecutionService:
 
 ### 11.1 Backend Technology Stack
 
-| **Component** | **Choice** | **Alternative Considered** | **Rationale** |
-|---------------|------------|---------------------------|---------------|
-| **Web Framework** | FastAPI | Django, Flask | Async support, automatic OpenAPI docs |
-| **Database** | PostgreSQL | MongoDB, SQLite | JSONB support, ACID properties for research data |
-| **ORM** | SQLAlchemy | Django ORM, Tortoise | Mature async support, flexibility |
-| **Cache** | Redis | Memcached, In-memory | Pub/sub for real-time, data structures |
-| **AI Orchestration** | LangGraph | Custom, LangChain | Purpose-built for agent workflows |
-| **WebSocket** | Socket.io | Native WebSocket | Mature ecosystem, fallback support |
+| **Component**        | **Choice** | **Alternative Considered** | **Rationale**                                    |
+| -------------------- | ---------- | -------------------------- | ------------------------------------------------ |
+| **Web Framework**    | FastAPI    | Django, Flask              | Async support, automatic OpenAPI docs            |
+| **Database**         | PostgreSQL | MongoDB, SQLite            | JSONB support, ACID properties for research data |
+| **ORM**              | SQLAlchemy | Django ORM, Tortoise       | Mature async support, flexibility                |
+| **Cache**            | Redis      | Memcached, In-memory       | Pub/sub for real-time, data structures           |
+| **AI Orchestration** | LangGraph  | Custom, LangChain          | Purpose-built for agent workflows                |
+| **WebSocket**        | Socket.io  | Native WebSocket           | Mature ecosystem, fallback support               |
 
 ### 11.2 Frontend Technology Stack
 
-| **Component** | **Choice** | **Alternative Considered** | **Rationale** |
-|---------------|------------|---------------------------|---------------|
-| **Framework** | React 18 | Vue, Svelte | Large ecosystem, TypeScript support |
-| **Build Tool** | Vite | Create React App, Webpack | Fast development, modern tooling |
-| **State Management** | React Context + Hooks | Redux, Zustand | Sufficient for prototype complexity |
-| **UI Library** | Custom Components | Material-UI, Chakra | Full control for research UI needs |
-| **Real-time** | Socket.io Client | Native WebSocket | Matches backend choice |
+| **Component**        | **Choice**            | **Alternative Considered** | **Rationale**                       |
+| -------------------- | --------------------- | -------------------------- | ----------------------------------- |
+| **Framework**        | React 18              | Vue, Svelte                | Large ecosystem, TypeScript support |
+| **Build Tool**       | Vite                  | Create React App, Webpack  | Fast development, modern tooling    |
+| **State Management** | React Context + Hooks | Redux, Zustand             | Sufficient for prototype complexity |
+| **UI Library**       | Custom Components     | Material-UI, Chakra        | Full control for research UI needs  |
+| **Real-time**        | Socket.io Client      | Native WebSocket           | Matches backend choice              |
 
 ### 11.3 Infrastructure Choices
 
-| **Component** | **Choice** | **Alternative Considered** | **Rationale** |
-|---------------|------------|---------------------------|---------------|
-| **Deployment** | Docker Compose | Kubernetes, Serverless | Simple for single-machine prototype |
-| **Auth Provider** | Custom Magic Links | Auth0, Firebase | Research prototype simplicity |
-| **Email Service** | SMTP | SendGrid, AWS SES | Cost-effective for low volume |
-| **Monitoring** | Prometheus + Custom | DataDog, New Relic | Open source, research data ownership |
+| **Component**     | **Choice**          | **Alternative Considered** | **Rationale**                        |
+| ----------------- | ------------------- | -------------------------- | ------------------------------------ |
+| **Deployment**    | Docker Compose      | Kubernetes, Serverless     | Simple for single-machine prototype  |
+| **Auth Provider** | Custom Magic Links  | Auth0, Firebase            | Research prototype simplicity        |
+| **Email Service** | SMTP                | SendGrid, AWS SES          | Cost-effective for low volume        |
+| **Monitoring**    | Prometheus + Custom | DataDog, New Relic         | Open source, research data ownership |
 
 ---
 
@@ -1159,28 +1315,28 @@ class AgentExecutionService:
 
 ### 12.1 Technical Risks
 
-| **Risk** | **Probability** | **Impact** | **Mitigation** |
-|----------|----------------|------------|----------------|
-| **Claude API Rate Limits** | High | High | Implement aggressive rate limiting, request queuing |
-| **Database Performance** | Medium | Medium | Connection pooling, query optimization |
-| **Memory Leaks in Long Sessions** | Medium | Medium | Session timeouts, periodic cleanup |
-| **WebSocket Connection Issues** | Low | Medium | Automatic reconnection, fallback polling |
+| **Risk**                          | **Probability** | **Impact** | **Mitigation**                                      |
+| --------------------------------- | --------------- | ---------- | --------------------------------------------------- |
+| **Claude API Rate Limits**        | High            | High       | Implement aggressive rate limiting, request queuing |
+| **Database Performance**          | Medium          | Medium     | Connection pooling, query optimization              |
+| **Memory Leaks in Long Sessions** | Medium          | Medium     | Session timeouts, periodic cleanup                  |
+| **WebSocket Connection Issues**   | Low             | Medium     | Automatic reconnection, fallback polling            |
 
 ### 12.2 Research Risks
 
-| **Risk** | **Probability** | **Impact** | **Mitigation** |
-|----------|----------------|------------|----------------|
-| **Insufficient Agent Coordination** | Medium | High | Multiple coordination patterns, fallback to single agent |
-| **Poor Learning from Feedback** | Medium | Medium | Multiple feedback mechanisms, manual pattern curation |
-| **Limited Use Case Validation** | Low | High | Diverse test scenarios, external user testing |
+| **Risk**                            | **Probability** | **Impact** | **Mitigation**                                           |
+| ----------------------------------- | --------------- | ---------- | -------------------------------------------------------- |
+| **Insufficient Agent Coordination** | Medium          | High       | Multiple coordination patterns, fallback to single agent |
+| **Poor Learning from Feedback**     | Medium          | Medium     | Multiple feedback mechanisms, manual pattern curation    |
+| **Limited Use Case Validation**     | Low             | High       | Diverse test scenarios, external user testing            |
 
 ### 12.3 Product Risks
 
-| **Risk** | **Probability** | **Impact** | **Mitigation** |
-|----------|----------------|------------|----------------|
-| **No Clear PMF Indicators** | Medium | High | Multiple metrics, qualitative feedback collection |
-| **Technical Debt Impedes Research** | High | Medium | Regular refactoring, clear architecture boundaries |
-| **Prototype Not Scalable** | High | Low | Document scaling requirements, architecture evolution path |
+| **Risk**                            | **Probability** | **Impact** | **Mitigation**                                             |
+| ----------------------------------- | --------------- | ---------- | ---------------------------------------------------------- |
+| **No Clear PMF Indicators**         | Medium          | High       | Multiple metrics, qualitative feedback collection          |
+| **Technical Debt Impedes Research** | High            | Medium     | Regular refactoring, clear architecture boundaries         |
+| **Prototype Not Scalable**          | High            | Low        | Document scaling requirements, architecture evolution path |
 
 ---
 
@@ -1189,16 +1345,19 @@ class AgentExecutionService:
 ### 13.1 Architecture Evolution Path
 
 **Phase 1 (Current)**: Monolithic prototype
+
 - Single backend service
 - Shared database
 - Synchronous agent execution
 
 **Phase 2 (Scaling)**: Service-oriented
+
 - Agent execution service
 - Coordination service
 - Analytics service
 
 **Phase 3 (Production)**: Microservices
+
 - Independent agent containers
 - Event-driven architecture
 - Distributed state management
@@ -1206,12 +1365,14 @@ class AgentExecutionService:
 ### 13.2 Technical Debt Management
 
 **Acceptable Debt for Research Phase**:
+
 - Hardcoded configuration values
 - Simple error handling
 - Manual deployment processes
 - Basic monitoring setup
 
 **Must Address Before Scaling**:
+
 - Database query optimization
 - Comprehensive test coverage
 - Security hardening

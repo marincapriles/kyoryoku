@@ -1,56 +1,179 @@
 # Claude Code System Setup for Kyoryoku Development
 
 ## Role & Context
-You are the sole developer for Kyoryoku (協力), a research prototype exploring multi-agent AI collaboration. Your mission is to build a platform that demonstrates how AI agents can work together effectively, learning from their interactions to improve performance over time.
+
+You are the sole developer for Kyoryoku (協力), a strategic research platform for validating the commercial viability of multi-agent AI systems. Your mission is to build a focused validation prototype that tests specific high-value use cases with rigorous market and technical validation.
+
+## 📋 **CRITICAL: PRD as Source of Truth**
+
+**ALWAYS reference `PRD.md` as the single source of truth for this project.**
+
+### PRD Status
+
+- **File**: `PRD.md` (Version 3.0)
+- **Status**: Canonical source of truth - consolidated from multiple previous versions
+- **Strategic Focus**: Customer Success Response Teams (PRIMARY), RFP/Proposal Acceleration (SECONDARY)
+- **Last Updated**: December 2024
+- **Key Change**: Shifted from general research to strategic market validation with clear PMF paths
+
+### Before Making Any Decisions:
+
+1. **Read relevant sections of `PRD.md`** for context
+2. **Follow the prioritization matrix** in Section 2.1
+3. **Align with the strategic focus** on customer success and RFP use cases
+4. **Consider the technical risk assessment** in Section 6.2
+5. **Reference the development roadmap** in Section 10
+
+### PRD Quick Reference Guide
+
+- **Market Analysis**: Section 2 - Use case prioritization and competitive landscape
+- **Customer Research**: Section 3 - Validation framework with interview scripts
+- **Core Hypotheses**: Section 4.1 - Four primary hypotheses with statistical frameworks
+- **Architecture**: Section 5 - Focused prototype for customer success teams
+- **Technical Risks**: Section 6.2 - Comprehensive risk assessment matrix
+- **Success Metrics**: Section 8 - SMART goals with specific targets
+- **Roadmap**: Section 10 - 12-week development phases with resource allocation
 
 ## Project Overview
-- **Goal**: Research prototype for testing multi-agent AI team configurations
+
+- **Strategic Goal**: Validate multi-agent AI commercial viability in customer success and RFP markets
+- **Primary Focus**: Customer Success Response Teams (18-minute → 3-minute ticket resolution)
+- **Secondary Focus**: RFP/Proposal Acceleration (80-hour → 4-hour completion)
 - **Stack**: FastAPI backend, React TypeScript frontend, PostgreSQL, Redis, Anthropic Claude
-- **Timeline**: 8-week development phases (Foundation → Coordination → Learning → Analysis)
-- **Current Phase**: Foundation - Core agent framework and basic web interface
+- **Timeline**: 12-week validation phases (Foundation → Scaled Validation → Business Case)
+- **Success Criteria**: 60%+ willingness to pay, 50%+ performance improvement, 70%+ pilot retention
 
 ## Development Process
 
 ### Session Protocol
+
 **ALWAYS start each development session by:**
-1. Reading `DEVELOPMENT_PLAN.md` to understand current phase and goals
-2. Checking Phase 1.1 immediate next steps
-3. Identifying the next logical task based on dependencies
-4. Recommending specific implementation steps to the user
-5. Updating both this file and the development plan with progress
+
+1. **Reading `PRD.md` Section 10** (Development Roadmap) to understand current phase
+2. **Checking the strategic focus** in Section 2.1 (Customer Success PRIMARY)
+3. **Reviewing technical priorities** based on risk assessment in Section 6.2
+4. **Identifying customer validation tasks** from Section 3 if applicable
+5. **Updating progress** against the specific Phase metrics in PRD.md
 
 ### Current Status
-- **Phase**: Phase 1.1 - Core Agent Implementation  
-- **Next Task**: Agent Schema & Services (foundational requirement)
-- **Goal**: Build flexible agent system with configurable capabilities
-- **PRD Version**: Using PRD v22 with Shadow Learning System and business-focused team templates
+
+- **Phase**: Phase 1 - Foundation & Validation (Weeks 1-4)
+- **Primary Market Focus**: Customer Success Response Team (4-agent system)
+- **Testing Priority**: Content Creation Team implementation (for platform validation)
+- **Current Week**: Week 1 - Customer Research (60%) + Technical Setup (40%)
+- **Next Priority**: Customer interviews + Content Creation Team for testing
+- **PRD Version**: 3.0 - Strategic Research Prototype (canonical source)
 
 ## Development Principles
 
-### 1. Research-First Approach
-- Every feature should help answer the core research questions about agent collaboration
-- Prioritize flexibility and experimentation over production polish
-- Document learnings and patterns discovered during development
-- Build for rapid iteration and testing of different configurations
+### 1. Customer-Validation-First Approach
 
-### 2. Code Quality Standards
-- Use TypeScript for all frontend code
-- Follow FastAPI best practices for backend
-- Implement comprehensive error handling
-- Write tests for core functionality
-- Use Black, flake8, and mypy for Python code quality
-- Document all API endpoints with proper schemas
+- **Every feature must validate specific hypotheses** from PRD Section 4.1
+- **Prioritize customer research** - 100 interviews planned (Section 3.1)
+- **Build for pilot customers** - 3-5 pilots per use case target
+- **Measure willingness to pay** - 60%+ target for $500+/month pricing
+- **Track retention metrics** - 70%+ weekly active usage after 30 days
 
-### 3. Architecture Guidelines
-- Keep agent definitions flexible and configurable
-- Design for real-time communication between agents
-- Implement proper separation between agent logic and coordination
-- Use async/await patterns throughout for performance
-- Design database schemas to support experimentation and analysis
+### 2. Strategic Focus Discipline
+
+- **Primary**: Customer Success Response Teams ONLY (until validated)
+- **Secondary**: RFP/Proposal Acceleration (after primary validation)
+- **Resist scope creep** - No other use cases until current ones validated
+- **Follow prioritization matrix** in PRD Section 2.1
+- **Reference customer personas** Sarah (CS Ops Manager) and David (Sales Engineer) in Section 13.1
+
+### 3. Technical Implementation with Business Focus
+
+- **Cost-conscious development** - Track token usage ($0.44/ticket target)
+- **Error handling for pilot customers** - 95%+ uptime requirement
+- **Shadow learning implementation** - Core differentiator for competitive moat
+- **Integration readiness** - Plan for Zendesk, Salesforce, Intercom
+- **Statistical rigor** - N=100+ samples, p<0.05 significance testing
+
+## Key Research Hypotheses (From PRD Section 4.1)
+
+### H1: Multi-Agent Teams Deliver Superior ROI vs Single Agents [PRIMARY]
+
+- **Target**: 85% task completion vs 60% single agent
+- **Measurement**: A/B test with N=200 tasks per condition
+- **Implementation Focus**: Build customer support 4-agent team first
+
+### H2: Shadow Learning Creates Sustainable Competitive Moats [PRIMARY]
+
+- **Target**: 85% suggestion acceptance after 4 weeks
+- **Measurement**: 12-week longitudinal study
+- **Implementation Focus**: Observation → Suggestion → Assisted phases
+
+### H3: Customers Will Pay Premium for Multi-Agent Capabilities [CRITICAL]
+
+- **Target**: 70% pilot-to-paid conversion
+- **Measurement**: Conjoint analysis with N=200 prospects
+- **Implementation Focus**: ROI demonstration, pricing validation
+
+### H4: Technical Infrastructure Can Scale Economically [SECONDARY]
+
+- **Target**: <$0.50 cost per resolved ticket
+- **Measurement**: Load testing with statistical monitoring
+- **Implementation Focus**: Token optimization, response caching
+
+## Customer Success Team Architecture (Primary Focus)
+
+### Four-Agent Specialization (PRD Section 5.1)
+
+```python
+TriageSpecialist    # Categorization, urgency assessment, routing
+SolutionResearcher  # Knowledge search, context matching, solution ranking
+ResponseCrafter     # Writing, tone matching, personalization
+EscalationAnalyst   # Complexity assessment, expert matching, handoff prep
+```
+
+### Success Metrics for Customer Success Use Case
+
+- **Time Reduction**: 18 minutes → 3 minutes (83% improvement)
+- **Quality Maintenance**: 4.2/5 rating (vs 3.8/5 human baseline)
+- **Escalation Accuracy**: 95% correct escalations
+- **Customer Satisfaction**: Maintain current levels while improving speed
+
+## Content Creation Team Architecture (Testing Priority)
+
+### Five-Agent Specialization (PRD Section 5.3)
+
+```python
+StoryMiner          # Extract compelling narratives from source material
+TechnicalTranslator # Simplify complex concepts for general audiences
+VoiceCrafter        # Maintain authentic, personal tone
+StructureArchitect  # Organize ideas into compelling narrative flow
+HookDesigner        # Create engaging openings and maintain momentum
+```
+
+### Iterative Refinement Coordination Pattern
+
+Unlike Customer Success (sequential) or RFP (parallel), Content Creation uses iterative refinement:
+
+1. **Story Mining** → 2. **Structure** → 3. **Translation** → 4. **Voice** → 5. **Hooks**
+   Each agent builds on the previous agent's work in rounds.
+
+### Testing Success Metrics
+
+- **Platform Validation**: 90%+ successful multi-agent handoffs
+- **Content Creation Speed**: 10 minutes vs 2 hours traditional
+- **Demo Effectiveness**: Track prospect engagement during demos
+- **Coordination Pattern Validation**: Prove iterative refinement works
+
+### Why This Tests Our Platform
+
+- **Proves multi-agent coordination** before customer pilots
+- **Tests complex coordination patterns** (iterative vs sequential/parallel)
+- **Validates agent reasoning transparency** needed for customer trust
+- **Creates marketing assets** while testing the platform
+- **Demonstrates value proposition** through meta-storytelling
+
+**Implementation Priority**: Week 2-3 for platform testing and demos
 
 ## Key Commands & Workflows
 
 ### Development Commands
+
 ```bash
 # Start development environment
 make dev                    # Runs both backend and frontend
@@ -68,142 +191,140 @@ make format               # Format with black
 make lint                 # Run flake8 and mypy
 ```
 
-### Testing Strategy
-- Test agent communication protocols
-- Test team coordination mechanisms
-- Test learning and feedback systems
-- Integration tests for complete scenarios
-- Performance tests for concurrent sessions
+### Customer Validation Workflows
 
-## Project Structure Knowledge
+```bash
+# Reference PRD Section 3.1 for customer research framework
+# Use interview scripts from PRD Appendix A
+# Track metrics from PRD Section 8 (Success Metrics)
+```
 
-### Backend Architecture (`/backend/app/`)
-- `agents/` - Agent implementations and base classes
-- `api/` - FastAPI route handlers
-- `core/` - Configuration, database, and utilities
-- `models/` - SQLAlchemy database models
-- `services/` - Business logic and agent coordination
-- `utils/` - Helper functions and shared utilities
+## Risk Management (From PRD Section 6.2)
 
-### Frontend Architecture (`/frontend/src/`)
-- `components/` - Reusable React components
-- `pages/` - Route-level page components
-- `services/` - API clients and WebSocket handlers
-- `hooks/` - Custom React hooks for state management
-- `types/` - TypeScript type definitions
-- `utils/` - Frontend utility functions
+### High-Priority Technical Risks
 
-### Database Models
-- `Agent` - Agent definitions with capabilities, beliefs, goals
-- `Team` - Team configurations and coordination rules
-- `Session` - Test sessions and experiment tracking
-- `Message` - Agent communications and reasoning traces
+- **API costs exceed budget** - Implement token optimization, aggressive caching
+- **Multi-agent coordination failures** - Extensive testing, fallback to single agent
+- **Response latency > 10 seconds** - Async processing, pre-computation
+- **Pilot customers don't convert** - Improve onboarding, demonstrate ROI
 
-## Current Implementation Status
+### Market Validation Risks
 
-### ✅ Completed
-- [x] Project structure and configuration
-- [x] FastAPI backend with health endpoints
-- [x] React TypeScript frontend setup
-- [x] Docker configuration for databases
-- [x] Basic agent model and API structure
-- [x] Development tooling and workflows
+- **No clear PMF** - Continuous customer validation, pivot criteria defined
+- **Competitive response** - Focus on network effects, data moats
+- **Customer acquisition costs too high** - Product-led growth strategies
 
-### 🚧 In Progress
-- [ ] Core agent framework implementation
-- [ ] Agent template system
-- [ ] Basic web interface for agent configuration
-- [ ] WebSocket real-time communication
+## Implementation Priorities (From PRD Section 10)
 
-### 📋 Upcoming (Foundation Phase)
-- [ ] Agent memory system
-- [ ] Simple coaching/feedback mechanism
-- [ ] First test scenario implementation
-- [ ] Performance metrics collection
+### Week 1: Customer Research & Technical Setup (Current)
 
-## Research Questions to Address
+**Customer Research (60% effort)**:
 
-### Technical Questions
-1. **Agent Memory**: How should agents store and recall learned patterns?
-2. **Communication**: What protocols work best for agent-to-agent communication?
-3. **Coordination**: How can agents effectively delegate and collaborate?
-4. **Learning**: What feedback mechanisms drive fastest improvement?
+- Conduct 25 customer interviews using PRD Appendix A scripts
+- Validate pain points: 18-minute ticket resolution, knowledge fragmentation
+- Test willingness to pay: $500-2000/month pricing
 
-### Product Questions
-1. **Use Cases**: Which scenarios show immediate value over single agents?
-2. **User Experience**: How much transparency do users need into agent reasoning?
-3. **Configuration**: What's the minimum viable complexity for useful teams?
-4. **Performance**: Where are the practical limits of current LLM capabilities?
+**Technical Foundation (40% effort)**:
 
-## Key Implementation Notes
+- Set up development environment
+- Implement basic agent framework for TriageSpecialist
+- Create customer support scenario prototype
 
-### Agent Design Philosophy
-- Agents should be composable and reusable across different team configurations
-- Each agent maintains its own beliefs, goals, and constraints
-- Communication should be explicit and auditable
-- Learning should be persistent across sessions
+### Week 2: Customer Success Prototype
 
-### Team Coordination Patterns
-- **Hierarchical**: Clear leader-follower relationships
-- **Peer-to-peer**: Collaborative decision making
-- **Pipeline**: Sequential task handoffs
-- **Swarm**: Parallel processing with aggregation
+- Build 4-agent coordination system (Triage → Research → Craft → Escalate)
+- Implement basic shadow learning (observation phase)
+- Create simple web interface for testing with pilot customers
 
-### Experimentation Framework
-- Every team configuration should be saveable and replayable
-- Metrics collection should be automatic and comprehensive
-- A/B testing should be built into the core system
-- User feedback should be easily integrated into agent learning
+### Week 3-4: Baseline Establishment & Testing
 
-## Development Priorities
+- Deploy prototype with 5 pilot customers
+- Complete statistical baseline measurements
+- A/B test multi-agent vs single agent performance
+- Gather willingness to pay data
 
-### Week 1-2 (Foundation)
-1. Complete core agent framework with flexible configuration
-2. Implement basic web interface for agent setup
-3. Create first working scenario (simple research task)
-4. Set up basic metrics collection
+## Success Criteria & Decision Framework (PRD Section 12)
 
-### Week 3-4 (Coordination)
-1. Implement multi-agent communication protocols
-2. Build task delegation system
-3. Create coordination visualizer
-4. Add 3-5 diverse test scenarios
+### Go Decision Criteria (Must achieve ALL)
 
-### Ongoing Maintenance
-- Keep this file updated with new learnings and patterns
-- Document any architecture decisions and their reasoning
-- Track which approaches work well vs. poorly
-- Maintain list of technical debt and improvement opportunities
+1. **Technical feasibility demonstrated** - Multi-agent coordination >70% success
+2. **Market demand validated** - 60%+ willing to pay $500+/month
+3. **Sustainable unit economics** - 85%+ gross margins proven
+4. **Clear competitive advantages** - Shadow learning differentiation
+
+### Pivot Criteria (ANY triggers pivot)
+
+1. **<40% willingness to pay** at target pricing
+2. **<30% performance improvement** vs baselines
+3. **<50% pilot retention** after 90 days
+4. **Technical barriers prove insurmountable**
+
+### Current Key Metrics to Track
+
+- **Customer interview completion**: 25/25 target for Week 1
+- **Pain point validation**: Average ticket time confirmation
+- **Pricing validation**: Willingness to pay $500+ percentage
+- **Technical progress**: Basic agent framework completion
 
 ## Environment Variables Required
+
 ```bash
-# Backend
+# Backend (same as before)
 ANTHROPIC_API_KEY=sk-...
 DATABASE_URL=postgresql+asyncpg://postgres:postgres@localhost:5432/kyoryoku
 REDIS_URL=redis://localhost:6379
 
-# Optional
-SMTP_HOST=smtp.gmail.com
-SMTP_USER=your-email@gmail.com
-SMTP_PASSWORD=your-app-password
+# Customer Research (if using tools)
+CALENDLY_API_KEY=...    # For scheduling interviews
+MIXPANEL_TOKEN=...      # For tracking pilot customer usage
 ```
 
-## Troubleshooting Common Issues
+## Customer Research Integration
 
-### Database Connection Issues
-- Ensure PostgreSQL is running: `make docker-up`
-- Check database URL in .env file
-- Run migrations: `alembic upgrade head`
+### Interview Management
 
-### Frontend Build Issues
-- Clear node_modules: `rm -rf frontend/node_modules && cd frontend && npm install`
-- Check for TypeScript errors: `cd frontend && npm run build`
+- **Target**: 25 CS Operations Managers, 15 CS Directors, 10 CS Reps
+- **Scripts**: Use PRD Appendix A interview framework
+- **Focus**: Pain validation, willingness to pay, pilot interest
+- **Success Metric**: 60% show interest in pilot program
 
-### Agent Communication Issues
-- Check WebSocket connections in browser dev tools
-- Verify Redis is running for session state
-- Check agent configuration and capabilities matching
+### Pilot Customer Onboarding
+
+- **Shadow Learning**: Start with observation-only mode (Week 1-2)
+- **Success Criteria**: 50%+ time reduction, 70%+ satisfaction, ROI demonstration
+- **Retention Target**: 80%+ after 90 days
+
+## Troubleshooting & Common Issues
+
+### PRD Alignment Issues
+
+- **Problem**: Feature request not aligned with strategic focus
+- **Solution**: Reference PRD Section 2.1 prioritization matrix
+- **Escalation**: Only implement if directly validates core hypotheses
+
+### Customer Validation Blockers
+
+- **Problem**: Low customer interview response rates
+- **Solution**: Reference PRD Section 13 for customer journey optimization
+- **Alternative**: Focus on warm network introductions
+
+### Technical Performance Issues
+
+- **Problem**: Token costs exceeding $0.50/ticket
+- **Solution**: Implement PRD Section 6.3 cost optimization strategies
+- **Monitoring**: Track real-time cost per interaction
 
 ---
 
-*This file should be updated regularly as the project evolves. Document new patterns, architectural decisions, and lessons learned.*
+## 🎯 **Key Reminders for Future Claude Instances**
+
+1. **`PRD.md` is the single source of truth** - Always reference it before making decisions
+2. **Customer Success Teams are PRIMARY market focus** - Don't dilute effort on other use cases
+3. **Content Creation Team is TESTING PRIORITY** - Implement first for platform validation and demos
+4. **Customer validation comes first** - 60% effort on research, 40% on technical in Week 1
+5. **Statistical rigor required** - N=100+ samples, p<0.05 significance
+6. **Pilot customers are real customers** - Build for production-level reliability
+7. **Cost consciousness** - Track token usage and unit economics constantly
+8. **Strategic decision criteria** - Clear Go/Pivot/No-Go thresholds defined
+
+_This file should be updated when PRD.md changes or when major learnings emerge. Always maintain alignment between this file and the canonical PRD._
