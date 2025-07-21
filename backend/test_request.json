@@ -1,0 +1,9 @@
+{
+  "request": "Hi, I cannot access my account and I have an important client presentation in 30 minutes. My password reset is not working. Please help urgently!",
+  "customer_context": {
+    "customer_tier": "premium",
+    "account_type": "business", 
+    "previous_tickets": 1,
+    "customer_id": "cust_premium_001"
+  }
+}

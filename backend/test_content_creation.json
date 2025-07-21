@@ -1,0 +1,6 @@
+{
+  "source_material": "Kyoryoku is a multi-agent AI collaboration platform that helps business teams work faster. The platform uses specialized AI agents that coordinate with each other to complete complex tasks. For example, in customer support, we have agents that triage tickets, research solutions, craft responses, and handle escalations. Our shadow learning system allows the agents to learn from human experts during a gradual onboarding process. Early tests show 70% time reduction in ticket resolution with maintained quality scores.",
+  "content_type": "blog_post",
+  "target_audience": "business_executives",
+  "iterations": 1
+}

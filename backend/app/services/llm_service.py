@@ -26,7 +26,7 @@ class LLMService:
     def __init__(self):
         self.client = AsyncAnthropic(api_key=settings.ANTHROPIC_API_KEY)
         self.chat_model = ChatAnthropic(
-            model="claude-3-sonnet-20240229",
+            model="claude-3-5-sonnet-20241022",
             api_key=settings.ANTHROPIC_API_KEY,
             max_tokens=2048,
             temperature=0.3
@@ -146,7 +146,103 @@ Respond in JSON format with:
 - confidence: 0.0-1.0 confidence in escalation decision
 - reasoning: Factors leading to escalation decision
 - suggestions: Specialist type and handoff approach
-- escalation_needed: always true for this agent type"""
+- escalation_needed: always true for this agent type""",
+
+            # Content Creation Team Agents (Demo/Validation Use Case)
+            "story_miner": """You are a Story Miner agent for content creation. Your role is to extract compelling narratives and human elements from source material.
+
+CAPABILITIES: {capabilities}
+GOALS: {goals}
+CONSTRAINTS: {constraints}
+
+For each piece of source material:
+1. Identify the most compelling human stories and experiences
+2. Extract key moments that create emotional connection
+3. Find relatable elements that resonate with audiences
+4. Surface authentic experiences and genuine insights
+
+Respond in JSON format with:
+- content: The compelling narratives and stories you've extracted
+- confidence: 0.0-1.0 confidence in story relevance and impact
+- reasoning: Why these stories are compelling and authentic
+- suggestions: Alternative narrative angles or additional story elements
+- escalation_needed: true if source material lacks compelling narratives""",
+
+            "technical_translator": """You are a Technical Translator agent for content creation. Your role is to simplify complex concepts for general audiences without losing essential meaning.
+
+CAPABILITIES: {capabilities}
+GOALS: {goals}
+CONSTRAINTS: {constraints}
+
+For each technical concept:
+1. Break down complex ideas into understandable components
+2. Create analogies and metaphors that clarify meaning
+3. Remove jargon while preserving accuracy
+4. Make concepts accessible to non-technical audiences
+
+Respond in JSON format with:
+- content: Simplified, accessible explanation of the technical concepts
+- confidence: 0.0-1.0 confidence in translation accuracy and clarity
+- reasoning: How you maintained accuracy while simplifying
+- suggestions: Alternative explanations or additional clarifications
+- escalation_needed: true if concepts are too complex to simplify safely""",
+
+            "voice_crafter": """You are a Voice Crafter agent for content creation. Your role is to maintain authentic, personal tone throughout content.
+
+CAPABILITIES: {capabilities}
+GOALS: {goals}
+CONSTRAINTS: {constraints}
+
+For each piece of content:
+1. Ensure authentic, human voice that connects with readers
+2. Maintain consistent tone and personality
+3. Balance professionalism with genuine warmth
+4. Make content feel personal and engaging
+
+Respond in JSON format with:
+- content: Content refined for authentic voice and tone
+- confidence: 0.0-1.0 confidence in voice consistency and authenticity
+- reasoning: How you enhanced the human connection and authenticity
+- suggestions: Alternative tone approaches or voice adjustments
+- escalation_needed: true if content feels too corporate or impersonal""",
+
+            "structure_architect": """You are a Structure Architect agent for content creation. Your role is to organize ideas into compelling narrative flow.
+
+CAPABILITIES: {capabilities}
+GOALS: {goals}
+CONSTRAINTS: {constraints}
+
+For each piece of content:
+1. Create logical progression that builds engagement
+2. Organize ideas for maximum impact and clarity
+3. Ensure smooth transitions between concepts
+4. Structure content for optimal readability and flow
+
+Respond in JSON format with:
+- content: Content restructured for optimal narrative flow
+- confidence: 0.0-1.0 confidence in structural improvements
+- reasoning: How the new structure enhances readability and impact
+- suggestions: Alternative structural approaches or organization methods
+- escalation_needed: true if content lacks sufficient substance for good structure""",
+
+            "hook_designer": """You are a Hook Designer agent for content creation. Your role is to create engaging openings and maintain momentum throughout.
+
+CAPABILITIES: {capabilities}
+GOALS: {goals}
+CONSTRAINTS: {constraints}
+
+For each piece of content:
+1. Create compelling opening that captures immediate attention
+2. Design hooks that maintain reader interest throughout
+3. Craft memorable conclusions that leave lasting impact
+4. Ensure momentum builds naturally from start to finish
+
+Respond in JSON format with:
+- content: Content enhanced with engaging hooks and strong momentum
+- confidence: 0.0-1.0 confidence in engagement and memorability
+- reasoning: How the hooks enhance reader engagement and retention
+- suggestions: Alternative hook approaches or engagement techniques
+- escalation_needed: true if content lacks engaging elements to work with"""
         }
         
         base_prompt = prompts.get(agent_type, prompts["triage_specialist"])
@@ -170,7 +266,7 @@ Respond in JSON format with:
         """Call Claude API with prompts"""
         
         response = await self.client.messages.create(
-            model="claude-3-sonnet-20240229",
+            model="claude-3-5-sonnet-20241022",
             max_tokens=2048,
             temperature=0.3,
             system=system_prompt,
@@ -193,12 +289,37 @@ Respond in JSON format with:
                 json_str = response_text[start_idx:end_idx]
                 data = json.loads(json_str)
                 
+                # Handle flexible response formats from Claude
+                content = data.get("content", "")
+                if isinstance(content, dict):
+                    content = json.dumps(content, indent=2)
+                elif not isinstance(content, str):
+                    content = str(content)
+                
+                # Handle reasoning field
+                reasoning = data.get("reasoning", "")
+                if isinstance(reasoning, list):
+                    reasoning = ". ".join(str(r) for r in reasoning)
+                elif not isinstance(reasoning, str):
+                    reasoning = str(reasoning)
+                
+                # Handle suggestions field
+                suggestions = data.get("suggestions", [])
+                if isinstance(suggestions, dict):
+                    # Convert dict suggestions to list of strings
+                    suggestions = [f"{k}: {v}" for k, v in suggestions.items()]
+                elif not isinstance(suggestions, list):
+                    suggestions = [str(suggestions)]
+                
+                # Ensure all suggestion items are strings
+                suggestions = [str(s) for s in suggestions]
+                
                 return AgentResponse(
-                    content=data.get("content", ""),
+                    content=content,
                     confidence=float(data.get("confidence", 0.5)),
-                    reasoning=data.get("reasoning", ""),
-                    suggestions=data.get("suggestions", []),
-                    escalation_needed=data.get("escalation_needed", False),
+                    reasoning=reasoning,
+                    suggestions=suggestions,
+                    escalation_needed=bool(data.get("escalation_needed", False)),
                     metadata=data.get("metadata", {})
                 )
             else:
@@ -310,6 +431,122 @@ class MultiAgentOrchestrator:
             pipeline_results["escalation"] = escalation_response
         
         return pipeline_results
+
+    async def process_content_creation_request(
+        self,
+        source_material: str,
+        content_type: str = "blog_post",
+        target_audience: str = "business_professionals",
+        iterations: int = 2
+    ) -> Dict[str, Any]:
+        """Process content creation through iterative refinement pipeline"""
+        
+        content_context = {
+            "content_type": content_type,
+            "target_audience": target_audience,
+            "iteration": 0
+        }
+        
+        iteration_results = {}
+        current_content = source_material
+        
+        # Iterative refinement process
+        for iteration in range(iterations):
+            iteration_results[f"iteration_{iteration + 1}"] = {}
+            
+            # Round 1: Story Mining
+            story_response = await self.llm_service.process_agent_request(
+                agent_type="story_miner",
+                task=f"Extract compelling narratives from this material: {current_content}",
+                context={**content_context, "iteration": iteration + 1},
+                capabilities=["extract_narratives", "identify_compelling_stories", "find_human_elements"],
+                goals=["Find the most compelling stories in source material", "Identify relatable human elements"],
+                constraints=["Stay true to source material facts", "Focus on authentic experiences"]
+            )
+            iteration_results[f"iteration_{iteration + 1}"]["story_mining"] = story_response
+            current_content = story_response.content
+            
+            # Round 2: Structure Architecture  
+            structure_response = await self.llm_service.process_agent_request(
+                agent_type="structure_architect",
+                task=f"Organize this content into compelling narrative flow: {current_content}",
+                context={**content_context, "iteration": iteration + 1, "story_mining_result": story_response.dict()},
+                capabilities=["organize_narrative_flow", "create_logical_progression", "build_compelling_structure"],
+                goals=["Create clear, logical narrative progression", "Organize ideas for maximum impact"],
+                constraints=["Maintain logical coherence", "Keep reader engagement high"]
+            )
+            iteration_results[f"iteration_{iteration + 1}"]["structure"] = structure_response
+            current_content = structure_response.content
+            
+            # Round 3: Technical Translation
+            translation_response = await self.llm_service.process_agent_request(
+                agent_type="technical_translator",
+                task=f"Simplify complex concepts for {target_audience}: {current_content}",
+                context={**content_context, "iteration": iteration + 1, "structure_result": structure_response.dict()},
+                capabilities=["simplify_complex_concepts", "create_analogies", "bridge_technical_gaps"],
+                goals=["Make complex ideas accessible to everyone", "Bridge technical and non-technical worlds"],
+                constraints=["Maintain technical accuracy", "Preserve essential meaning"]
+            )
+            iteration_results[f"iteration_{iteration + 1}"]["translation"] = translation_response
+            current_content = translation_response.content
+            
+            # Round 4: Voice Crafting
+            voice_response = await self.llm_service.process_agent_request(
+                agent_type="voice_crafter",
+                task=f"Enhance authentic voice and tone: {current_content}",
+                context={**content_context, "iteration": iteration + 1, "translation_result": translation_response.dict()},
+                capabilities=["maintain_authentic_voice", "create_personal_tone", "ensure_consistency"],
+                goals=["Create authentic, personal connection", "Ensure content feels genuinely human"],
+                constraints=["Stay true to brand personality", "Avoid generic corporate speak"]
+            )
+            iteration_results[f"iteration_{iteration + 1}"]["voice"] = voice_response
+            current_content = voice_response.content
+            
+            # Round 5: Hook Design
+            hook_response = await self.llm_service.process_agent_request(
+                agent_type="hook_designer",
+                task=f"Create engaging hooks and maintain momentum: {current_content}",
+                context={**content_context, "iteration": iteration + 1, "voice_result": voice_response.dict()},
+                capabilities=["create_compelling_openings", "maintain_reader_interest", "design_engaging_hooks"],
+                goals=["Capture attention from the first sentence", "Create memorable, impactful endings"],
+                constraints=["Stay relevant to core message", "Maintain credibility and trust"]
+            )
+            iteration_results[f"iteration_{iteration + 1}"]["hooks"] = hook_response
+            current_content = hook_response.content
+            
+            # Calculate iteration confidence
+            iteration_confidence = min(
+                story_response.confidence,
+                structure_response.confidence,
+                translation_response.confidence,
+                voice_response.confidence,
+                hook_response.confidence
+            )
+            iteration_results[f"iteration_{iteration + 1}"]["overall_confidence"] = iteration_confidence
+            iteration_results[f"iteration_{iteration + 1}"]["final_content"] = current_content
+            
+            # If confidence is high enough, we can stop early
+            if iteration_confidence > 0.9 and iteration > 0:
+                break
+        
+        # Final summary
+        final_result = {
+            "iterations": iteration_results,
+            "final_content": current_content,
+            "content_type": content_type,
+            "target_audience": target_audience,
+            "total_iterations": len(iteration_results),
+            "platform_validation": {
+                "coordination_success": all(
+                    iter_data.get("overall_confidence", 0) > 0.6 
+                    for iter_data in iteration_results.values()
+                ),
+                "iterative_improvement": len(iteration_results) > 1,
+                "agent_handoffs": len(iteration_results) * 5  # 5 agents per iteration
+            }
+        }
+        
+        return final_result
 
 
 # Global instances

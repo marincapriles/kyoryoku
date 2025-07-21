@@ -143,6 +143,117 @@ class TemplateService:
                     "Maintain client confidentiality",
                     "Attribute sources properly"
                 ]
+            },
+            # Content Creation Team (Demo/Validation Use Case)
+            {
+                "name": "Story Miner",
+                "description": "Extract compelling narratives from source material",
+                "template_type": "story_miner",
+                "capabilities": [
+                    "extract_narratives",
+                    "identify_compelling_stories",
+                    "find_human_elements",
+                    "discover_key_moments",
+                    "surface_emotional_hooks"
+                ],
+                "default_goals": [
+                    "Find the most compelling stories in source material",
+                    "Identify relatable human elements",
+                    "Extract key moments that drive engagement"
+                ],
+                "constraints": [
+                    "Stay true to source material facts",
+                    "Focus on authentic experiences",
+                    "Maintain narrative integrity"
+                ]
+            },
+            {
+                "name": "Technical Translator",
+                "description": "Simplify complex concepts for general audiences",
+                "template_type": "technical_translator",
+                "capabilities": [
+                    "simplify_complex_concepts",
+                    "create_analogies",
+                    "bridge_technical_gaps",
+                    "explain_without_jargon",
+                    "make_accessible"
+                ],
+                "default_goals": [
+                    "Make complex ideas accessible to everyone",
+                    "Create clear, understandable explanations",
+                    "Bridge technical and non-technical worlds"
+                ],
+                "constraints": [
+                    "Maintain technical accuracy",
+                    "Avoid oversimplification",
+                    "Preserve essential meaning"
+                ]
+            },
+            {
+                "name": "Voice Crafter",
+                "description": "Maintain authentic, personal tone",
+                "template_type": "voice_crafter",
+                "capabilities": [
+                    "maintain_authentic_voice",
+                    "create_personal_tone",
+                    "ensure_consistency",
+                    "match_brand_personality",
+                    "humanize_content"
+                ],
+                "default_goals": [
+                    "Create authentic, personal connection",
+                    "Maintain consistent voice throughout",
+                    "Ensure content feels genuinely human"
+                ],
+                "constraints": [
+                    "Stay true to brand personality",
+                    "Maintain professional standards",
+                    "Avoid generic corporate speak"
+                ]
+            },
+            {
+                "name": "Structure Architect",
+                "description": "Organize ideas into compelling narrative flow",
+                "template_type": "structure_architect",
+                "capabilities": [
+                    "organize_narrative_flow",
+                    "create_logical_progression",
+                    "build_compelling_structure",
+                    "optimize_readability",
+                    "enhance_engagement"
+                ],
+                "default_goals": [
+                    "Create clear, logical narrative progression",
+                    "Organize ideas for maximum impact",
+                    "Ensure smooth flow from start to finish"
+                ],
+                "constraints": [
+                    "Maintain logical coherence",
+                    "Respect content priorities",
+                    "Keep reader engagement high"
+                ]
+            },
+            {
+                "name": "Hook Designer",
+                "description": "Create engaging openings and maintain momentum",
+                "template_type": "hook_designer",
+                "capabilities": [
+                    "create_compelling_openings",
+                    "maintain_reader_interest",
+                    "design_engaging_hooks",
+                    "build_momentum",
+                    "craft_strong_conclusions"
+                ],
+                "default_goals": [
+                    "Capture attention from the first sentence",
+                    "Maintain engagement throughout",
+                    "Create memorable, impactful endings"
+                ],
+                "constraints": [
+                    "Stay relevant to core message",
+                    "Avoid clickbait tactics",
+                    "Maintain credibility and trust"
+                ]
             }
         ]
     
@@ -222,6 +333,35 @@ class TemplateService:
                     {
                         "role": "Insight Reporter",
                         "capabilities": ["create_exec_summaries", "generate_reports", "present_findings"]
+                    }
+                ]
+            ),
+            AgentTemplate(
+                name="Content Creation Team",
+                description="Platform validation and demo capability (NOT a target market)",
+                use_case="Create compelling marketing content through iterative refinement",
+                target_metric="Content creation: 10 minutes vs 2 hours traditional",
+                coordination_pattern="iterative_refinement",
+                agents=[
+                    {
+                        "role": "Story Miner",
+                        "capabilities": ["extract_narratives", "identify_compelling_stories", "find_human_elements"]
+                    },
+                    {
+                        "role": "Technical Translator",
+                        "capabilities": ["simplify_complex_concepts", "create_analogies", "bridge_technical_gaps"]
+                    },
+                    {
+                        "role": "Voice Crafter",
+                        "capabilities": ["maintain_authentic_voice", "create_personal_tone", "ensure_consistency"]
+                    },
+                    {
+                        "role": "Structure Architect",
+                        "capabilities": ["organize_narrative_flow", "create_logical_progression", "build_compelling_structure"]
+                    },
+                    {
+                        "role": "Hook Designer",
+                        "capabilities": ["create_compelling_openings", "maintain_reader_interest", "design_engaging_hooks"]
                     }
                 ]
             )
