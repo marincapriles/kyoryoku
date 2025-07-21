@@ -4,7 +4,7 @@ from contextlib import asynccontextmanager
 import socketio
 
 from app.core.config import settings
-from app.api import agents, teams, sessions, health
+from app.api import agents, teams, sessions, health, llm
 from app.core.database import init_db
 
 
@@ -45,6 +45,7 @@ app.include_router(health.router, prefix="/api/health", tags=["health"])
 app.include_router(agents.router, prefix="/api/agents", tags=["agents"])
 app.include_router(teams.router, prefix="/api/teams", tags=["teams"])
 app.include_router(sessions.router, prefix="/api/sessions", tags=["sessions"])
+app.include_router(llm.router, prefix="/api/llm", tags=["llm"])
 
 
 @app.get("/")
