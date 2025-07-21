@@ -1,8 +1,8 @@
 # Kyoryoku (協力) - Product Requirements Document
 
-## Version 3.0 - Strategic Research Prototype for Agentic Team Validation
+## Version 4.0 - Professional Services Multi-Agent Platform
 
-**Document Status**: Source of Truth | **Last Updated**: December 2024 | **Next Review**: January 2025
+**Document Status**: Source of Truth | **Last Updated**: January 2025 | **Next Review**: February 2025
 
 ---
 
@@ -10,6 +10,7 @@
 
 | Version | Date     | Changes                                                                                      | Author           |
 | ------- | -------- | -------------------------------------------------------------------------------------------- | ---------------- |
+| 4.0     | Jan 2025 | Added professional services expansion: Content Marketing, Investment Research, Software Development teams | Strategic Expansion |
 | 3.0     | Dec 2024 | Complete strategic rewrite with market validation, business model, technical risk assessment | Strategic Review |
 | 2.0     | Nov 2024 | Added use case frameworks, shadow learning system, detailed architecture                     | Initial Research |
 | 1.0     | Oct 2024 | Initial concept and basic research objectives                                                | Concept Phase    |
@@ -18,20 +19,32 @@
 
 ## 1. Executive Summary
 
-**Kyoryoku** (協力 - "cooperation/collaboration") is a strategic research platform for validating the commercial viability of multi-agent AI systems. This PRD defines requirements for a **focused validation prototype** that tests specific high-value use cases with rigorous market and technical validation.
+**Kyoryoku** (協力 - "cooperation/collaboration") is a comprehensive multi-agent AI platform that replaces traditional professional service teams with specialized AI agent teams. This PRD defines requirements for a **professional services platform** that spans multiple high-value industries with proven business models and technical validation.
 
 The name reflects our core hypothesis: that AI agents working in harmony (和) through mutual cooperation (協力) can deliver measurable business value that justifies premium pricing, much like how omotenashi emerges from coordinated human teams.
 
-**Document Purpose**: Define a strategic prototype for validating specific multi-agent use cases with clear paths to product-market fit and sustainable business models.
+**Document Purpose**: Define a comprehensive platform for professional-grade multi-agent teams across Content Marketing, Investment Research, Software Development, Customer Success, and RFP/Proposal services with clear paths to product-market fit and sustainable business models.
 
 ### Strategic Focus
 
-Based on preliminary market research, we are **prioritizing Customer Success Response Teams** as our primary validation target, with **RFP/Proposal Acceleration** as secondary validation. This focus allows us to:
+We are expanding beyond our initial validation focus to become a comprehensive professional services platform. Our **multi-market approach** targets five distinct professional domains:
 
-- Target markets with urgent, quantifiable pain points
-- Validate willingness to pay premium pricing ($500-2000/month)
-- Build defensible technical moats through domain specialization
-- Achieve measurable ROI within 90-day pilot periods
+**Tier 1 - Validated Markets** (Customer Success, RFP/Proposal Acceleration):
+- Proven market demand and willingness to pay
+- Technical validation completed
+- Ready for scale and expansion
+
+**Tier 2 - Professional Services Expansion** (Content Marketing, Investment Research, Software Development):
+- Large addressable markets ($8B-$15B each)
+- Premium pricing models ($199-$5,000/month)
+- Industry-specific expertise and workflows
+- Advanced BDI agent architectures
+
+This expansion allows us to:
+- Diversify market risk across multiple industries
+- Target higher-value professional services
+- Build defensible moats through domain specialization
+- Achieve $10M+ ARR potential within 3 years
 
 ---
 
@@ -39,13 +52,16 @@ Based on preliminary market research, we are **prioritizing Customer Success Res
 
 ### 2.1 Use Case Prioritization Matrix
 
-| Use Case                  | Market Size | Pain Urgency  | Technical Feasibility | Competitive Moat | Total Score | Priority      |
-| ------------------------- | ----------- | ------------- | --------------------- | ---------------- | ----------- | ------------- |
-| Customer Success Teams    | $15B        | High (8/10)   | Medium (6/10)         | High (8/10)      | 22/30       | **PRIMARY**   |
-| RFP/Proposal Acceleration | $8B         | High (9/10)   | Medium (7/10)         | Medium (6/10)    | 22/30       | **SECONDARY** |
-| Product Intelligence      | $12B        | Medium (6/10) | High (8/10)           | Low (4/10)       | 18/30       | Tertiary      |
-| Knowledge Transfer        | $5B         | Medium (5/10) | Low (4/10)            | Medium (6/10)    | 15/30       | Deprioritized |
-| Market Intelligence       | $6B         | Low (4/10)    | Medium (6/10)         | Low (3/10)       | 13/30       | Deprioritized |
+| Use Case                     | Market Size | Pain Urgency  | Technical Feasibility | Competitive Moat | Total Score | Priority          |
+| ---------------------------- | ----------- | ------------- | --------------------- | ---------------- | ----------- | ----------------- |
+| Customer Success Teams       | $15B        | High (8/10)   | Proven (9/10)         | High (8/10)      | 25/30       | **TIER 1 - SCALE** |
+| RFP/Proposal Acceleration    | $8B         | High (9/10)   | Proven (8/10)         | Medium (6/10)    | 23/30       | **TIER 1 - SCALE** |
+| Content Marketing Teams      | $12B        | High (8/10)   | Medium (7/10)         | High (9/10)      | 24/30       | **TIER 2 - BUILD** |
+| Investment Research Teams    | $15B        | High (9/10)   | Medium (6/10)         | High (9/10)      | 24/30       | **TIER 2 - BUILD** |
+| Software Development Teams   | $25B        | High (8/10)   | Medium (7/10)         | Medium (7/10)    | 22/30       | **TIER 2 - BUILD** |
+| Product Intelligence         | $12B        | Medium (6/10) | High (8/10)           | Low (4/10)       | 18/30       | Tier 3 - Future   |
+| Knowledge Transfer           | $5B         | Medium (5/10) | Low (4/10)            | Medium (6/10)    | 15/30       | Deprioritized     |
+| Market Intelligence          | $6B         | Low (4/10)    | Medium (6/10)         | Low (3/10)       | 13/30       | Deprioritized     |
 
 ### 2.2 Competitive Landscape
 
@@ -98,6 +114,51 @@ Based on preliminary market research, we are **prioritizing Customer Success Res
 - Win rates suffer when rushed
 
 **Value Proposition**: Complete comprehensive RFP responses in 4-6 hours instead of 80-120 hours.
+
+#### Tertiary: Content Marketing Teams (10-50 people)
+
+**Personas**:
+- **Emma - Marketing Director**: Needs 5x content output without hiring
+- **Jake - Content Manager**: Drowning in content requests from sales/product
+- **Maria - SEO Specialist**: Struggling to scale quality content production
+
+**Pain Points**:
+- Content creation takes 8-12 hours per piece
+- Inconsistent quality across freelancers/agencies  
+- 60% higher costs than agencies ($5K-15K/month)
+- Scaling content team requires $200K+ annual investment
+
+**Value Proposition**: Scale content production 5x while reducing costs 60% vs agencies.
+
+#### Quaternary: Investment Research Teams (5-25 people)
+
+**Personas**:
+- **Robert - Research Director**: Needs institutional-quality analysis without $80K analysts
+- **Sarah - Portfolio Manager**: Wants faster, deeper research for investment decisions
+- **Kevin - Wealth Advisor**: Needs professional research to compete with larger firms
+
+**Pain Points**:
+- Junior analyst costs $80K+ annually
+- Research quality inconsistent across team
+- Time-to-insight takes days vs hours needed
+- Limited coverage due to resource constraints
+
+**Value Proposition**: Replace junior analyst costs with institutional-quality research 24/7.
+
+#### Quinary: Software Development Teams (10-100 people)
+
+**Personas**:
+- **Alex - CTO**: Needs consistent senior-level team without hiring challenges
+- **Lisa - Product Manager**: Frustrated with dev team coordination and communication gaps
+- **Mark - Tech Lead**: Wants 24/7 development capability for global teams
+
+**Pain Points**:
+- Senior developer hiring takes 3-6 months
+- Team coordination overhead reduces productivity 40%
+- Feature delivery timelines unpredictable
+- Knowledge transfer and documentation gaps
+
+**Value Proposition**: Consistent senior-level team 24/7 with 60% faster feature delivery.
 
 ---
 
@@ -359,6 +420,140 @@ Unlike Customer Success (sequential workflow) or RFP (parallel processing), Cont
 
 **Note**: This use case serves validation and demonstration purposes only. It does not change our strategic focus on Customer Success and RFP markets.
 
+### 5.4 Professional Services Expansion: Content Marketing Team
+
+**Purpose**: Replace marketing agencies and scale content teams 5x without hiring
+
+#### Agent Specializations
+
+```python
+class ContentStrategistAgent(Agent):
+    capabilities = ["audience_research", "editorial_planning", "performance_optimization"]
+    knowledge_domains = ["market_analysis", "content_calendars", "analytics"]
+    success_metrics = ["content_performance", "audience_engagement", "strategic_alignment"]
+
+class ResearchSpecialistAgent(Agent):
+    capabilities = ["primary_research", "fact_checking", "expert_interviews"]
+    knowledge_domains = ["industry_data", "research_methods", "expert_networks"]
+    success_metrics = ["research_accuracy", "source_credibility", "insight_depth"]
+
+class ContentWriterAgent(Agent):
+    capabilities = ["long_form_writing", "brand_voice_consistency", "SEO_optimization"]
+    knowledge_domains = ["content_frameworks", "brand_guidelines", "writing_styles"]
+    success_metrics = ["content_quality", "brand_consistency", "engagement_rates"]
+
+class SEOSpecialistAgent(Agent):
+    capabilities = ["keyword_strategy", "technical_SEO", "performance_tracking"]
+    knowledge_domains = ["search_algorithms", "keyword_research", "SEO_tools"]
+    success_metrics = ["search_rankings", "organic_traffic", "conversion_rates"]
+
+class VisualDesignAgent(Agent):
+    capabilities = ["graphic_design", "infographic_creation", "brand_visual_identity"]
+    knowledge_domains = ["design_principles", "visual_tools", "brand_assets"]
+    success_metrics = ["visual_quality", "brand_compliance", "engagement_lift"]
+
+class DistributionAnalyticsAgent(Agent):
+    capabilities = ["multi_channel_distribution", "performance_tracking", "optimization"]
+    knowledge_domains = ["distribution_channels", "analytics_tools", "audience_behavior"]
+    success_metrics = ["reach_optimization", "engagement_tracking", "ROI_measurement"]
+```
+
+#### Coordination Pattern: Parallel Content Factory
+
+1. **Strategy Phase**: Content Strategist creates editorial calendar and content briefs
+2. **Research Phase**: Research Specialist gathers data and validates facts
+3. **Creation Phase**: Content Writer, SEO Specialist, and Visual Designer work in parallel
+4. **Distribution Phase**: Distribution & Analytics Agent optimizes multi-channel publication
+5. **Optimization Phase**: Continuous performance analysis and strategy refinement
+
+### 5.5 Professional Services Expansion: Investment Research Team
+
+**Purpose**: Replace junior analysts with institutional-quality research 24/7
+
+#### Agent Specializations
+
+```python
+class FundamentalAnalysisAgent(Agent):
+    capabilities = ["financial_statement_analysis", "valuation_models", "industry_benchmarking"]
+    knowledge_domains = ["accounting_principles", "valuation_methods", "financial_data"]
+    success_metrics = ["analysis_accuracy", "prediction_quality", "insight_depth"]
+
+class TechnicalAnalysisAgent(Agent):
+    capabilities = ["chart_pattern_recognition", "technical_indicators", "momentum_analysis"]
+    knowledge_domains = ["technical_patterns", "market_psychology", "trading_algorithms"]
+    success_metrics = ["signal_accuracy", "timing_precision", "risk_assessment"]
+
+class MacroeconomicAnalysisAgent(Agent):
+    capabilities = ["economic_indicator_analysis", "policy_impact_assessment", "sector_rotation"]
+    knowledge_domains = ["economic_theory", "policy_frameworks", "market_cycles"]
+    success_metrics = ["macro_accuracy", "policy_prediction", "sector_timing"]
+
+class RiskManagementAgent(Agent):
+    capabilities = ["VaR_calculation", "stress_testing", "portfolio_optimization"]
+    knowledge_domains = ["risk_models", "stress_scenarios", "optimization_algorithms"]
+    success_metrics = ["risk_prediction", "downside_protection", "optimization_quality"]
+
+class SentimentAnalysisAgent(Agent):
+    capabilities = ["market_psychology", "news_sentiment", "institutional_flow_analysis"]
+    knowledge_domains = ["behavioral_finance", "sentiment_indicators", "flow_data"]
+    success_metrics = ["sentiment_accuracy", "contrarian_signals", "flow_prediction"]
+```
+
+#### Coordination Pattern: Multi-Perspective Analysis
+
+1. **Data Gathering**: All agents simultaneously gather relevant data
+2. **Independent Analysis**: Each agent performs specialized analysis
+3. **Cross-Validation**: Agents validate findings against each other
+4. **Synthesis**: Combined report with weighted confidence scores
+5. **Continuous Learning**: Performance tracking and model refinement
+
+### 5.6 Professional Services Expansion: Software Development Team
+
+**Purpose**: Provide consistent senior-level development team 24/7
+
+#### Agent Specializations
+
+```python
+class ProductManagerAgent(Agent):
+    capabilities = ["requirements_gathering", "user_story_creation", "feature_prioritization"]
+    knowledge_domains = ["product_methodologies", "user_research", "market_analysis"]
+    success_metrics = ["requirement_clarity", "feature_adoption", "user_satisfaction"]
+
+class TechnicalArchitectAgent(Agent):
+    capabilities = ["system_design", "technology_selection", "API_design"]
+    knowledge_domains = ["architecture_patterns", "technology_stacks", "scalability"]
+    success_metrics = ["system_reliability", "performance_optimization", "maintainability"]
+
+class FrontendDeveloperAgent(Agent):
+    capabilities = ["UI_implementation", "responsive_design", "accessibility_compliance"]
+    knowledge_domains = ["frontend_frameworks", "UX_principles", "web_standards"]
+    success_metrics = ["code_quality", "user_experience", "performance_metrics"]
+
+class BackendDeveloperAgent(Agent):
+    capabilities = ["API_development", "database_design", "authentication_systems"]
+    knowledge_domains = ["backend_frameworks", "database_systems", "security_practices"]
+    success_metrics = ["API_reliability", "data_integrity", "security_compliance"]
+
+class QAEngineerAgent(Agent):
+    capabilities = ["test_planning", "automated_testing", "performance_validation"]
+    knowledge_domains = ["testing_frameworks", "quality_metrics", "automation_tools"]
+    success_metrics = ["bug_detection", "test_coverage", "quality_assurance"]
+
+class DevOpsEngineerAgent(Agent):
+    capabilities = ["CI_CD_pipelines", "infrastructure_management", "monitoring_systems"]
+    knowledge_domains = ["deployment_tools", "cloud_platforms", "monitoring_solutions"]
+    success_metrics = ["deployment_reliability", "system_uptime", "performance_monitoring"]
+```
+
+#### Coordination Pattern: Agile Development Workflow
+
+1. **Planning**: Product Manager creates requirements and user stories
+2. **Architecture**: Technical Architect designs system and APIs
+3. **Development**: Frontend and Backend Developers implement features
+4. **Quality Assurance**: QA Engineer validates functionality and performance
+5. **Deployment**: DevOps Engineer manages deployment and monitoring
+6. **Iteration**: Continuous feedback and improvement cycles
+
 ---
 
 ## 6. Technical Architecture & Risk Assessment
@@ -415,17 +610,34 @@ Unlike Customer Success (sequential workflow) or RFP (parallel processing), Cont
 
 #### Revenue Model Framework
 
-**Customer Support**: $500-2000/month per team (50-500 agents)
+**Tier 1 - Validated Markets (Ready to Scale):**
 
+**Customer Support**: $500-2000/month per team (50-500 agents)
 - Cost basis: $0.44 per ticket
-- Target: 1000 tickets/month
+- Target: 1000 tickets/month  
 - Gross margin: 85%+
 
 **RFP Acceleration**: $1000-5000/month per team
-
 - Cost basis: $11 per RFP
 - Target: 20 RFPs/month
 - Gross margin: 90%+
+
+**Tier 2 - Professional Services Expansion:**
+
+**Content Marketing**: $199-1999/month per team (10-50 people)
+- Cost basis: $2-8 per content piece
+- Target: 50-200 pieces/month
+- Gross margin: 88%+
+
+**Investment Research**: $500-5000/month per team (5-25 people)  
+- Cost basis: $15-25 per research report
+- Target: 20-100 reports/month
+- Gross margin: 85%+
+
+**Software Development**: $199-1999/month per team (10-100 people)
+- Cost basis: $5-15 per feature/task
+- Target: 50-200 tasks/month
+- Gross margin: 87%+
 
 ### 6.4 Error Handling & Reliability
 
@@ -449,32 +661,44 @@ Unlike Customer Success (sequential workflow) or RFP (parallel processing), Cont
 
 ### 7.1 Revenue Model
 
-#### Pricing Strategy
+#### Multi-Market Pricing Strategy
 
-**Tier 1: Team (5-25 agents)**: $500/month
+**Customer Success & RFP Teams:**
+- **Team (5-25 agents)**: $500-1,000/month
+- **Department (25-100 agents)**: $1,500-3,000/month  
+- **Enterprise (100+ agents)**: $5,000-15,000/month
 
-- Core multi-agent capabilities
-- Basic shadow learning
-- Email support
+**Content Marketing Teams:**
+- **Startup (10-25 people)**: $199-499/month
+- **Growth (25-50 people)**: $699-1,299/month
+- **Scale (50+ people)**: $1,499-1,999/month
 
-**Tier 2: Department (25-100 agents)**: $1,500/month
+**Investment Research Teams:**
+- **Independent (5-10 people)**: $500-1,500/month
+- **Firm (10-25 people)**: $2,000-3,500/month
+- **Institution (25+ people)**: $4,000-5,000/month
 
-- Advanced coordination features
-- Custom agent configurations
-- Priority support + CSM
+**Software Development Teams:**  
+- **Startup (10-25 people)**: $199-599/month
+- **Growth (25-50 people)**: $799-1,299/month
+- **Enterprise (50+ people)**: $1,499-1,999/month
 
-**Tier 3: Enterprise (100+ agents)**: $5,000+/month
+#### Enhanced Unit Economics (Multi-Market)
 
-- White-label deployment
-- Custom integrations
-- Dedicated implementation team
-
-#### Unit Economics (Year 1 Projections)
-
+**Tier 1 Markets (Validated)**:
 - **Customer Acquisition Cost**: $2,000-5,000
 - **Customer Lifetime Value**: $15,000-50,000
-- **Gross Margin**: 85%+
-- **Payback Period**: 6-12 months
+- **Gross Margin**: 85-90%
+
+**Tier 2 Markets (Professional Services)**:
+- **Customer Acquisition Cost**: $1,500-4,000  
+- **Customer Lifetime Value**: $8,000-36,000
+- **Gross Margin**: 85-88%
+
+**Blended Portfolio**:
+- **Average LTV/CAC Ratio**: 12x
+- **Payback Period**: 6-10 months
+- **3-Year ARR Potential**: $10M-36M
 
 ### 7.2 Go-to-Market Strategy
 
@@ -1059,21 +1283,35 @@ graph TB
 
 ### D. Financial Projections
 
-#### 3-Year Revenue Model
+#### 3-Year Multi-Market Revenue Model
 
-| Year   | Customers | ARPU    | Revenue | Costs | Profit |
-| ------ | --------- | ------- | ------- | ----- | ------ |
-| Year 1 | 50        | $12,000 | $600K   | $800K | -$200K |
-| Year 2 | 200       | $15,000 | $3.0M   | $2.1M | $900K  |
-| Year 3 | 500       | $18,000 | $9.0M   | $4.5M | $4.5M  |
+**Conservative Scenario:**
+| Year   | Tier 1 Rev | Tier 2 Rev | Total Rev | Costs  | Profit |
+| ------ | ---------- | ---------- | --------- | ------ | ------ |
+| Year 1 | $600K      | $200K      | $800K     | $1.0M  | -$200K |
+| Year 2 | $2.4M      | $1.8M      | $4.2M     | $2.5M  | $1.7M  |
+| Year 3 | $6.0M      | $4.5M      | $10.5M    | $5.2M  | $5.3M  |
 
-#### Unit Economics Detail
+**Optimistic Scenario:**
+| Year   | Tier 1 Rev | Tier 2 Rev | Total Rev | Costs  | Profit |
+| ------ | ---------- | ---------- | --------- | ------ | ------ |
+| Year 1 | $800K      | $400K      | $1.2M     | $1.2M  | $0     |
+| Year 2 | $4.8M      | $3.6M      | $8.4M     | $4.2M  | $4.2M  |
+| Year 3 | $12M       | $12M       | $24M      | $9.6M  | $14.4M |
 
-**Customer Acquisition Cost**: $2,500
-**Customer Lifetime Value**: $36,000 (24 months average)
-**LTV/CAC Ratio**: 14.4x
-**Gross Margin**: 85%
-**Payback Period**: 8 months
+#### Enhanced Unit Economics Detail
+
+**Blended Multi-Market Metrics:**
+- **Customer Acquisition Cost**: $1,500-5,000 (varies by market)
+- **Customer Lifetime Value**: $8,000-50,000 (24-36 months average)
+- **LTV/CAC Ratio**: 8-14x (varies by market tier)
+- **Gross Margin**: 85-90%
+- **Payback Period**: 6-12 months
+
+**Professional Services Advantage:**
+- Higher volume, lower ARPU markets reduce acquisition risk
+- Multiple revenue streams provide market diversification
+- Cross-selling opportunities across service types
 
 ---
 

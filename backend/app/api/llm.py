@@ -31,6 +31,19 @@ class ContentCreationRequest(BaseModel):
     iterations: int = 2
 
 
+class ContentMarketingRequest(BaseModel):
+    request: str
+    target_audience: str = "business_professionals"
+    content_type: str = "blog_post"
+    brand_context: Dict[str, Any] = {}
+
+
+class GuestConciergeRequest(BaseModel):
+    guest_request: str
+    guest_context: Dict[str, Any] = {}
+    location: str = "city_center"
+
+
 class AgentTestRequest(BaseModel):
     message: str
     agent_type: str = "triage_specialist"
@@ -84,6 +97,37 @@ async def process_content_creation(request: ContentCreationRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 
+@router.post("/content-marketing/process")
+async def process_content_marketing(request: ContentMarketingRequest):
+    """Process content marketing through 2-agent prototype team"""
+    try:
+        results = await orchestrator.process_content_marketing_request(
+            request=request.request,
+            target_audience=request.target_audience,
+            content_type=request.content_type,
+            brand_context=request.brand_context
+        )
+        return results
+    except Exception as e:
+        logger.error(f"Error processing content marketing request: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/guest-concierge/process")
+async def process_guest_concierge(request: GuestConciergeRequest):
+    """Process guest concierge request through 2-agent team"""
+    try:
+        results = await orchestrator.process_guest_concierge_request(
+            guest_request=request.guest_request,
+            guest_context=request.guest_context,
+            location=request.location
+        )
+        return results
+    except Exception as e:
+        logger.error(f"Error processing guest concierge request: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @router.post("/agent/test")
 async def test_agent(request: AgentTestRequest):
     """Quick test endpoint for agent functionality"""
@@ -99,7 +143,13 @@ async def test_agent(request: AgentTestRequest):
             "technical_translator": ["simplify_complex_concepts", "create_analogies", "bridge_technical_gaps"],
             "voice_crafter": ["maintain_authentic_voice", "create_personal_tone", "ensure_consistency"],
             "structure_architect": ["organize_narrative_flow", "create_logical_progression", "build_compelling_structure"],
-            "hook_designer": ["create_compelling_openings", "maintain_reader_interest", "design_engaging_hooks"]
+            "hook_designer": ["create_compelling_openings", "maintain_reader_interest", "design_engaging_hooks"],
+            # Content Marketing Team (2-agent prototype)
+            "content_strategist": ["audience_research", "editorial_planning", "performance_optimization"],
+            "content_producer": ["long_form_writing", "SEO_optimization", "brand_voice_consistency"],
+            # Guest Concierge Team (2-agent)
+            "guest_experience_agent": ["guest_preference_analysis", "experience_curation", "personalization"],
+            "concierge_coordinator": ["reservation_management", "logistics_coordination", "service_delivery"]
         }
         
         template_goals = {
@@ -112,7 +162,13 @@ async def test_agent(request: AgentTestRequest):
             "technical_translator": ["Make complex ideas accessible", "Bridge technical and non-technical worlds"],
             "voice_crafter": ["Create authentic personal connection", "Ensure content feels genuinely human"],
             "structure_architect": ["Create clear narrative progression", "Organize ideas for maximum impact"],
-            "hook_designer": ["Capture attention from first sentence", "Create memorable impactful endings"]
+            "hook_designer": ["Capture attention from first sentence", "Create memorable impactful endings"],
+            # Content Marketing Team (2-agent prototype)
+            "content_strategist": ["Develop effective content strategy", "Optimize for target audience engagement"],
+            "content_producer": ["Create high-quality, engaging content", "Optimize for search and conversion"],
+            # Guest Concierge Team (2-agent)
+            "guest_experience_agent": ["Understand guest needs deeply", "Create memorable experience recommendations"],
+            "concierge_coordinator": ["Ensure seamless experience delivery", "Anticipate and prevent issues"]
         }
         
         template_constraints = {
@@ -125,7 +181,13 @@ async def test_agent(request: AgentTestRequest):
             "technical_translator": ["Maintain technical accuracy", "Preserve essential meaning"],
             "voice_crafter": ["Stay true to brand personality", "Avoid generic corporate speak"],
             "structure_architect": ["Maintain logical coherence", "Keep reader engagement high"],
-            "hook_designer": ["Stay relevant to core message", "Maintain credibility and trust"]
+            "hook_designer": ["Stay relevant to core message", "Maintain credibility and trust"],
+            # Content Marketing Team (2-agent prototype)
+            "content_strategist": ["Stay within brand guidelines", "Focus on measurable outcomes"],
+            "content_producer": ["Maintain brand voice", "Include clear calls-to-action"],
+            # Guest Concierge Team (2-agent)
+            "guest_experience_agent": ["Consider budget and time constraints", "Ensure guest safety and satisfaction"],
+            "concierge_coordinator": ["Maintain premium service standards", "Stay within guest preferences"]
         }
         
         capabilities = template_capabilities.get(request.agent_type, [])
@@ -220,6 +282,36 @@ async def get_available_agents():
                 "capabilities": ["create_compelling_openings", "maintain_reader_interest", "design_engaging_hooks"],
                 "use_case": "Design hooks and maintain engagement",
                 "team": "Content Creation (Demo)"
+            },
+            # Content Marketing Team (2-agent prototype)
+            "content_strategist": {
+                "name": "Content Strategist",
+                "description": "Research audiences, plan content strategy, and optimize performance",
+                "capabilities": ["audience_research", "editorial_planning", "performance_optimization"],
+                "use_case": "Develop content strategy and audience insights",
+                "team": "Content Marketing (Prototype)"
+            },
+            "content_producer": {
+                "name": "Content Producer", 
+                "description": "Create high-quality content optimized for engagement and search",
+                "capabilities": ["long_form_writing", "SEO_optimization", "brand_voice_consistency"],
+                "use_case": "Produce ready-to-publish content",
+                "team": "Content Marketing (Prototype)"
+            },
+            # Guest Concierge Team (2-agent)
+            "guest_experience_agent": {
+                "name": "Guest Experience Agent",
+                "description": "Understand guest needs and create personalized experience recommendations",
+                "capabilities": ["guest_preference_analysis", "experience_curation", "personalization"],
+                "use_case": "Analyze guest needs and recommend experiences",
+                "team": "Guest Concierge"
+            },
+            "concierge_coordinator": {
+                "name": "Concierge Coordinator",
+                "description": "Arrange experiences, manage logistics, and ensure seamless execution",
+                "capabilities": ["reservation_management", "logistics_coordination", "service_delivery"],
+                "use_case": "Coordinate and execute guest experiences",
+                "team": "Guest Concierge"
             }
         }
     }

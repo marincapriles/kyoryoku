@@ -242,7 +242,85 @@ Respond in JSON format with:
 - confidence: 0.0-1.0 confidence in engagement and memorability
 - reasoning: How the hooks enhance reader engagement and retention
 - suggestions: Alternative hook approaches or engagement techniques
-- escalation_needed: true if content lacks engaging elements to work with"""
+- escalation_needed: true if content lacks engaging elements to work with""",
+
+            # Content Marketing Prototype Team (2 agents)
+            "content_strategist": """You are a Content Strategist agent for content marketing. Your role is to research audiences, plan content strategy, and optimize performance.
+
+CAPABILITIES: {capabilities}
+GOALS: {goals}
+CONSTRAINTS: {constraints}
+
+For each content marketing request:
+1. Analyze target audience and market positioning
+2. Create content strategy and editorial approach
+3. Define key messaging and content themes
+4. Plan distribution and performance metrics
+
+Respond in JSON format with:
+- content: Strategic content brief and recommendations
+- confidence: 0.0-1.0 confidence in strategy effectiveness
+- reasoning: Strategic rationale and market analysis
+- suggestions: Alternative approaches or optimization ideas
+- escalation_needed: true if strategy requires specialized expertise""",
+
+            "content_producer": """You are a Content Producer agent for content marketing. Your role is to create high-quality content optimized for engagement and search.
+
+CAPABILITIES: {capabilities}
+GOALS: {goals}
+CONSTRAINTS: {constraints}
+
+For each content production request:
+1. Write engaging, high-quality content based on strategy
+2. Optimize for SEO and target audience
+3. Ensure brand voice consistency and accuracy
+4. Include calls-to-action and engagement elements
+
+Respond in JSON format with:
+- content: Polished, ready-to-publish content
+- confidence: 0.0-1.0 confidence in content quality and effectiveness
+- reasoning: Content decisions and optimization rationale
+- suggestions: Distribution recommendations or content variations
+- escalation_needed: true if content requires expert review""",
+
+            # Guest Concierge Team (2 agents)
+            "guest_experience_agent": """You are a Guest Experience Agent for hospitality concierge services. Your role is to understand guest needs and create personalized experience recommendations.
+
+CAPABILITIES: {capabilities}
+GOALS: {goals}
+CONSTRAINTS: {constraints}
+
+For each guest request:
+1. Understand guest preferences, budget, and context
+2. Assess guest mood, urgency, and special requirements
+3. Identify optimal experience opportunities
+4. Consider timing, logistics, and guest satisfaction
+
+Respond in JSON format with:
+- content: Personalized experience recommendations and insights
+- confidence: 0.0-1.0 confidence in recommendation fit
+- reasoning: Guest analysis and recommendation rationale
+- suggestions: Alternative options or enhancement ideas
+- escalation_needed: true if request requires specialized local knowledge""",
+
+            "concierge_coordinator": """You are a Concierge Coordinator agent for hospitality services. Your role is to arrange experiences, manage logistics, and ensure seamless execution.
+
+CAPABILITIES: {capabilities}
+GOALS: {goals}
+CONSTRAINTS: {constraints}
+
+For each coordination request:
+1. Arrange reservations, bookings, and logistics
+2. Coordinate timing and transportation details
+3. Anticipate potential issues and backup plans
+4. Ensure premium service delivery and follow-up
+
+Respond in JSON format with:
+- content: Detailed coordination plan and arrangements
+- confidence: 0.0-1.0 confidence in execution feasibility
+- reasoning: Logistics planning and risk assessment
+- suggestions: Enhancements or contingency options
+- escalation_needed: true if arrangements require manager approval"""
         }
         
         base_prompt = prompts.get(agent_type, prompts["triage_specialist"])
@@ -547,6 +625,124 @@ class MultiAgentOrchestrator:
         }
         
         return final_result
+
+    async def process_content_marketing_request(
+        self,
+        request: str,
+        target_audience: str = "business_professionals",
+        content_type: str = "blog_post",
+        brand_context: Dict[str, Any] = None
+    ) -> Dict[str, Any]:
+        """Process content marketing request through 2-agent prototype team"""
+        
+        if brand_context is None:
+            brand_context = {}
+            
+        content_context = {
+            "target_audience": target_audience,
+            "content_type": content_type,
+            **brand_context
+        }
+        
+        # Step 1: Content Strategy
+        strategy_response = await self.llm_service.process_agent_request(
+            agent_type="content_strategist",
+            task=f"Create content strategy for: {request}",
+            context=content_context,
+            capabilities=["audience_research", "editorial_planning", "performance_optimization"],
+            goals=["Develop effective content strategy", "Optimize for target audience engagement"],
+            constraints=["Stay within brand guidelines", "Focus on measurable outcomes"]
+        )
+        
+        # Step 2: Content Production
+        production_context = {
+            **content_context,
+            "strategy_result": strategy_response.dict()
+        }
+        
+        production_response = await self.llm_service.process_agent_request(
+            agent_type="content_producer",
+            task=f"Create content based on strategy: {request}",
+            context=production_context,
+            capabilities=["long_form_writing", "SEO_optimization", "brand_voice_consistency"],
+            goals=["Create high-quality, engaging content", "Optimize for search and conversion"],
+            constraints=["Maintain brand voice", "Include clear calls-to-action"]
+        )
+        
+        # Calculate overall confidence
+        overall_confidence = min(strategy_response.confidence, production_response.confidence)
+        
+        return {
+            "strategy": strategy_response,
+            "production": production_response,
+            "final_content": production_response.content,
+            "overall_confidence": overall_confidence,
+            "content_type": content_type,
+            "target_audience": target_audience,
+            "team_coordination": {
+                "strategy_to_production": "successful",
+                "agent_handoffs": 1,
+                "coordination_success": overall_confidence > 0.7
+            }
+        }
+
+    async def process_guest_concierge_request(
+        self,
+        guest_request: str,
+        guest_context: Dict[str, Any] = None,
+        location: str = "city_center"
+    ) -> Dict[str, Any]:
+        """Process guest concierge request through 2-agent team"""
+        
+        if guest_context is None:
+            guest_context = {}
+            
+        concierge_context = {
+            "location": location,
+            **guest_context
+        }
+        
+        # Step 1: Guest Experience Analysis
+        experience_response = await self.llm_service.process_agent_request(
+            agent_type="guest_experience_agent",
+            task=f"Analyze guest needs and recommend experiences: {guest_request}",
+            context=concierge_context,
+            capabilities=["guest_preference_analysis", "experience_curation", "personalization"],
+            goals=["Understand guest needs deeply", "Create memorable experience recommendations"],
+            constraints=["Consider budget and time constraints", "Ensure guest safety and satisfaction"]
+        )
+        
+        # Step 2: Concierge Coordination
+        coordination_context = {
+            **concierge_context,
+            "experience_recommendations": experience_response.dict()
+        }
+        
+        coordination_response = await self.llm_service.process_agent_request(
+            agent_type="concierge_coordinator",
+            task=f"Coordinate arrangements for guest experience: {guest_request}",
+            context=coordination_context,
+            capabilities=["reservation_management", "logistics_coordination", "service_delivery"],
+            goals=["Ensure seamless experience delivery", "Anticipate and prevent issues"],
+            constraints=["Maintain premium service standards", "Stay within guest preferences"]
+        )
+        
+        # Calculate overall confidence
+        overall_confidence = min(experience_response.confidence, coordination_response.confidence)
+        
+        return {
+            "experience_analysis": experience_response,
+            "coordination_plan": coordination_response,
+            "final_recommendations": coordination_response.content,
+            "overall_confidence": overall_confidence,
+            "location": location,
+            "guest_satisfaction": {
+                "experience_fit": experience_response.confidence,
+                "execution_feasibility": coordination_response.confidence,
+                "coordination_success": overall_confidence > 0.7,
+                "agent_handoffs": 1
+            }
+        }
 
 
 # Global instances
